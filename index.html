@@ -10,9 +10,53 @@
     <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
-    <header class="top-bar">
-
+    <header class="top-bar"> <!--Feito-->
+        <h1>BuzzQuizz</h1>
     </header>
+    <main class="">
+        <section class="user-quizzes">
+            <div class="user-empty-quizz active"> <!--Enquanto o usuário não tiver nenhum quizz-->
+                <h2>Você não criou nenhum quizz ainda :(</h2>
+                <button class="create-quizz">Criar Quizz</button>
+            </div>
+            <div class="user-all-quizzes"> <!--Quando usuário tiver 1 quizz-->
+                <div class="section-tittle">
+                    <h1>Seus Quizzes</h1>
+                    <ion-icon class="icon-create-quizz" name="add-circle"></ion-icon>
+                </div>
+                <ul class="quizzes-by-user">
+                    <li class="quizz"> <!--Botar por HREF dps-->
+                        <img class="quizz-theme-img" src="imagens/123.jpg" alt="" width="340px" height="181px">
+                        <h1>Acerte os personagens correto de irmão do Jorel</h1>
+                    </li>
+                    <li class="quizz"> <!--Botar por HREF dps-->
+                        <img class="quizz-theme-img" src="imagens/123.jpg" alt="" width="340px" height="181px">
+                        <h1>Acerte os personagens correto de irmão do Jorel</h1>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="all-quizzes">
+            <div class="section-title">
+                <h1>Todos os Quizzes</h1>
+            </div>
+            <ul class="other-quizzes">
+                <li class="quizz"> <!--Botar por HREF dps-->
+                    <img class="quizz-theme-img" src="imagens/123.jpg" alt="" width="340px" height="181px">
+                    <h1>Acerte os personagens correto de irmão do Jorel</h1>
+                </li>
+                <li class="quizz"> <!--Botar por HREF dps-->
+                    <img class="quizz-theme-img" src="imagens/123.jpg" alt="">
+                    <h1>Acerte os personagens correto de irmão do Jorel</h1>
+                </li>
+                <li class="quizz"> <!--Botar por HREF dps-->
+                    <img class="quizz-theme-img" src="imagens/123.jpg" alt="" width="340px" height="181px">
+                    <h1>Acerte os personagens correto de irmão do Jorel</h1>
+                </li>
+            </ul>
+        </section>
+    </main>
     <script src="js/script.js"></script>
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
 </body>
 </html>
