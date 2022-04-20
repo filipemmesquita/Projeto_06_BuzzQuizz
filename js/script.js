@@ -15,7 +15,21 @@ function homeButton(element){
             break;
     }
 }
-
+let quizzCreatorChangePages = (pages) => document.querySelector(`.quizzCreation`).querySelectorAll(`section`)[pages].classList.toggle(`active`)
+function quizzCreatorProceed(element){
+    let infosText = document.querySelector(`.infos`)
+    const el = element.classList[0]
+        if(el === "proceedToQuestions"){
+            if(infosValidation()){
+                infosText.innerHTML = "Crie suas perguntas"
+                quizzCreatorChangePages(0)
+                quizzCreatorChangePages(1)
+                questionsGenerator(infosValidation())
+            } else {
+                alert(`Usuário, digite os dados corretamente`)
+            }
+        }
+}
 
 
 
