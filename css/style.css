@@ -300,6 +300,7 @@ main h1{
     text-align: center;
 }
 .open-icon{ /*Icone para abrir mais informações*/
+    display: none;
     width: 26px;
     height: 26px;
 }
@@ -364,6 +365,7 @@ main h1{
     display: none;
     flex-direction: column;
     width: 100%;
+    scroll-margin-top: 140px;
 }
 .quizzCreationInfo > div:last-child{
     margin-bottom: 0px;
@@ -374,6 +376,7 @@ main h1{
     justify-content: space-between;
     align-items: center;
 }
+
 /*Levels*/
 .quizzCreationLevels{
     width: 100%;

@@ -29,6 +29,16 @@ function quizzCreatorProceed(element){
                 alert(`Usuário, digite os dados corretamente`)
             }
         }
+        if(el === "proceedToLevels"){
+            if(questionsValidation()){
+                infosText.innerHTML = "Agora, decida os níveis"
+                quizzCreatorChangePages(1)
+                quizzCreatorChangePages(2)
+                levelsGenerator(infosValidation())
+            } else {
+                alert(`Usuário, digite os dados corretamente`)
+            }
+        }
 }
 function infosValidation(){
     const allInfoInputs = document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
@@ -56,6 +66,8 @@ function questionsGenerator(infos){
    for(let i = 1; i < questionNumbers + 1; i++){
         CreateQuestionsPage.innerHTML += questionSection(i)
    }
+   CreateQuestionsPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
+   CreateQuestionsPage.querySelector(`.open-icon`).classList.toggle(`active`)
    CreateQuestionsPage.innerHTML += `<button class="proceedToLevels btn">Prosseguir para criar níveis</button>`
 }
 function questionSection(i){
@@ -63,7 +75,7 @@ function questionSection(i){
     <section class="question box">
         <div class="questionTitle">
             <h1>Pergunta ${i}</h1>
-            <ion-icon class="open-icon" name="open-outline"></ion-icon>
+            <ion-icon class="open-icon active" name="open-outline" onclick="descriptionToggle(this)"></ion-icon>
         </div>
         <div class="quizzCreationInfos">
             <div class="quizzCreationInputBox">
@@ -92,7 +104,31 @@ function questionSection(i){
     </section>
     ` //Nas repostas incorretas as vezes da para fazer um loop
 }
-
-
-
-
+function descriptionToggle(element){
+    const identifier = element.parentNode
+    let allElementIcons;
+    let minimize;
+    let inputDiv;
+    switch (identifier.classList[0]){
+        case "questionTitle":
+            allElementIcons = document.querySelectorAll(`.quizzCreationQuestions .open-icon`);
+            minimize = document.querySelectorAll(`.quizzCreationInfos`);
+            inputDiv = identifier.parentNode.querySelector(`.quizzCreationInfos`)
+            break;
+        case "levelTitle":
+            allElementIcons = document.querySelectorAll(`.quizzCreationLevels .open-icon`);
+            minimize = document.querySelectorAll(`.levels`);
+            inputDiv = identifier.parentNode.querySelector(``)
+            break;
+    }
+    for(let i = 0; i < allElementIcons.length; i++){
+        if(allElementIcons[i].classList.contains("active")){
+        } else {
+            allElementIcons[i].classList.toggle(`active`)
+            minimize[i].classList.toggle(`active`)
+        }
+    }
+    inputDiv.classList.toggle(`active`)
+    element.classList.toggle(`active`)
+    inputDiv.scrollIntoView(true)
+}
