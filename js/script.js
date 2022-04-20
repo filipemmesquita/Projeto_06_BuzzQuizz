@@ -15,7 +15,7 @@ function homeButton(element){
             break;
     }
 }
-let quizzCreatorChangePages = (pages) => document.querySelector(`.quizzCreation`).querySelectorAll(`section`)[pages].classList.toggle(`active`)
+let quizzCreatorChangePages = (pages) => document.querySelectorAll(".quizzCreation > section")[pages].classList.toggle("active")
 function quizzCreatorProceed(element){
     let infosText = document.querySelector(`.infos`)
     const el = element.classList[0]
@@ -34,7 +34,7 @@ function quizzCreatorProceed(element){
                 infosText.innerHTML = "Agora, decida os níveis"
                 quizzCreatorChangePages(1)
                 quizzCreatorChangePages(2)
-                levelsGenerator(infosValidation())
+                levelGenerator(questionsValidation())
             } else {
                 alert(`Usuário, digite os dados corretamente`)
             }
@@ -130,5 +130,76 @@ function descriptionToggle(element){
     }
     inputDiv.classList.toggle(`active`)
     element.classList.toggle(`active`)
-    inputDiv.scrollIntoView(true)
+    inputDiv.scrollIntoView({block: 'start', behavior: 'smooth', inline: 'start'});
 }
+function isHexColor(str){
+    const validChars=["1","2","3","4","5","6","7","8","9","0","a","b","c","d","e","f","A","B","C","D","E","F"];
+    console.log("testando" +str)
+    if(str.substring(0,1)!=="#" && str.length!==7){
+        console.log(" # ou length deu ruim")
+        return false
+    }
+    
+    for(let x=1;x<7;x++){
+        let check=false;    
+        for(let i=0;i<validChars.length;i++){
+            if(str.charAt(x)===validChars[i]){
+                check=true;
+            }
+        }
+        if(!check){
+            console.log("retorna false")
+            return false
+        }
+    }
+    console.log("é cor")
+    return true
+}
+function questionsValidation(){
+    console.log("questions validation ativado")
+    const allQuestionInput = document.querySelectorAll(`.quizzCreationInfos .quizzCreationInputBox`)
+    const questionTitle = allQuestionInput[0]
+    const rightAnswer = allQuestionInput[1]
+    let wrongAnswerAmount=0;
+    console.log(questionTitle)
+    if(questionTitle.querySelectorAll(".inputInfos")[0].value.length < 20 ){
+        console.log("titulo menor que 20 caracteres")
+        return false
+    }
+    if(!isHexColor(questionTitle.querySelectorAll(".inputInfos")[1].value)){
+        console.log("não é cor")
+        return false
+    }
+    for(let x=1;x<allQuestionInput.length;x++){
+        const currentQuestionChecked = allQuestionInput[x].querySelectorAll(".inputInfos")
+        if(currentQuestionChecked[0].value!=="" ){
+            if(currentQuestionChecked[0].value.length<20){
+                console.log("texto da pergunta "+x + " muito curto")
+                return false
+            }
+            if(currentQuestionChecked[1].value.substring(0,9)!=="https://")
+            {
+                console.log("erro na url da pergunta "+x)
+                return false
+            }
+            if(x>1){
+                wrongAnswerAmount++;
+            }
+        }
+    }
+    if (wrongAnswerAmount===0){
+        console.log("0 respostas erradas")
+        return false
+    }
+    console.log(allQuestionInput)
+}
+function levelGenerator(infos){
+    const questionNumbers = infos.questionamount
+    let CreateQuestionsPage = document.querySelector(`.quizzCreationQuestions`)
+    for(let i = 1; i < questionNumbers + 1; i++){
+         CreateQuestionsPage.innerHTML += questionSection(i)
+    }
+    CreateQuestionsPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
+    CreateQuestionsPage.querySelector(`.open-icon`).classList.toggle(`active`)
+    CreateQuestionsPage.innerHTML += `<button class="proceedToLevels btn">Prosseguir para criar níveis</button>`
+ }
