@@ -4,7 +4,6 @@
 
 .mainpage{
     justify-content: left;
-    display:flex;
 }
 /*Desktop Width = (nDeQuizz x 340px) + ((nDeQuizz - 1) x 15px)*/
 /*esses mediaquery servem p sempre ter um espaço completo */
@@ -37,6 +36,9 @@
         .mainpage li{
             margin-right: 15px;
         }
+.quizzPageImg{
+    max-height: 227px;
+}
 
 
     
