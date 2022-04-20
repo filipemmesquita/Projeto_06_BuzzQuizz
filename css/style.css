@@ -26,6 +26,9 @@ button{ /*Resetar o css default do button*/
 .btn{
     background: #EC362D;
     border-radius: 15px;
+    width:100%;
+    height:54px;
+    margin: 30px;
     /*Text do Button*/
     font-weight: 400;
     font-size: 18px;
@@ -35,9 +38,6 @@ button{ /*Resetar o css default do button*/
     text-align: center;
     justify-content: center;
     color: #FFF5F4;
-    width:100%;
-    height:54px;
-    margin:15px;
 }
 /*Header - TopBar - Feito*/
 .topBar{
@@ -105,7 +105,7 @@ main h1{
 }
 .userEmptyQuizzes{
     padding: 40px 0 33px 0;
-    width: 100%;
+    width: 340px;
     height: 181px;
     background: #FAFAFA;
     border: 1px dashed #D5D5D5;
@@ -115,8 +115,8 @@ main h1{
     align-items: center;
     justify-content: space-between;
 }
-.userEmptyQuizzes h2{
-    width: 250px;
+.emptyText{
+    width: 240px;
     font-weight: 400;
     font-size: 20px;
     line-height: 23px;
@@ -287,29 +287,53 @@ main h1{
     line-height: 21px;
     color: #818181;
 }
-/*Main Quizz Creation*/
-main .quizzcreation{
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-.infos{
-    padding: 39px 0 29px 0;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 23px;
-    display: flex;
-    align-items: center;
-    color: #000000;
-}
 .quizzCreationGeneralInfos{
     width: 100%;
     display: none;
     flex-direction: column;
     align-items: center;
 }
-.quizzCreationContainer{
+/*Main - QuizzCreation*/
+.infos{
+    padding: 30px 0;
+    width: 100%;
+    text-align: center;
+}
+.open-icon{ /*Icone para abrir mais informações*/
+    width: 26px;
+    height: 26px;
+}
+.inputInfos{
+    padding: 13px 0 11px 14px;
+    width: 100%;
+    height: 46px;
+    background: #FFFFFF;
+    border: 1px solid #D1D1D1;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+    .inputinfos::placeholder{
+        font-style: italic;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 22px;
+        color: #BABABA;
+    }
+    .quizzCreationInputBox{
+        margin-top: 15px;
+        margin-bottom: 15px;
+        width: 100%;
+        height: 106px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+.quizzCreationQuestions > section{
+    margin-bottom: 24px;
+}   .quizzCreationQuestions > section:last-of-type{
+        margin-bottom: 0px;
+    }
+.box{
     padding: 21px 15px;   
     width: 100%;
     margin: 0 auto;
@@ -320,78 +344,35 @@ main .quizzcreation{
     align-items: center;
     justify-content: center;
 }
-.inputInfos{
-    padding: 13px 0 11px 14px;
-    margin-bottom: 9px;
-    width: 100%;
-    height: 46px;
-    background: #FFFFFF;
-    border: 1px solid #D1D1D1;
-    box-sizing: border-box;
-    border-radius: 5px;
-
-}
-.inputinfos::placeholder{
-    font-style: italic;
-    font-weight: 400;
-    font-size: 19px;
-    line-height: 22px;
-    color: #BABABA;
-}
-.quizzcreation h1{
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 23px;
-    display: flex;
-    align-items: center;
-    color: #000000;
-}
+/*Section GeneralInfos*/
+.generalInfos > input{
+    margin: 7.5px 0;
+}   .generalInfos > input:first-of-type{
+    margin-top: 0px;
+    } 
+    .generalInfos > input:last-of-type{
+        margin-bottom: 0px;
+    }     
+/*Section QuizzCreation - Questions!*/
 .quizzCreationQuestions{
     width: 100%;
     display: none;
     flex-direction: column;
     align-items: center;
 }
-.questionInfo,
-.rightAnswer,
-.wrongAnswer > div{
-    display: flex;
+.quizzCreationInfos{/*Aparecer no onclick*/
+    display: none;
     flex-direction: column;
-    width:100%;
+    width: 100%;
 }
-.wrongAnswer{
-    width:100%;
-}
-.questionInfo,
-.rightAnswer{
-    margin-bottom: 28px;
-}
-.questionInfo h1,
-.rightAnswer h1,
-.wrongAnswer h1{
-    margin-bottom: 14px;
-}
-.quizzCreationQuestions > div{
-    margin-bottom: 24px;
-}
-.wrongAnswer > div{
-    margin-bottom: 25px;
-}
-.wrongAnswer > div:last-child{
-    margin-bottom: 0;
+.quizzCreationInfo > div:last-child{
+    margin-bottom: 0px;
 }
 .questionTitle{
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.open-icon{
-    width: 26px;
-    height: 26px;
-}
-.proceedToLevels{
-    margin-bottom: 40px;
 }
 /*Levels*/
 .quizzCreationLevels{

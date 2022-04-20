@@ -8,21 +8,25 @@
 /*Desktop Width = (nDeQuizz x 340px) + ((nDeQuizz - 1) x 15px)*/
 /*esses mediaquery servem p sempre ter um espaço completo */
     @media screen and (min-width: 1100px){
+        .userEmptyQuizzes,
         .mainpage{
             width:710px;
         }
     }
     @media screen and (min-width: 1400px){
+        .userEmptyQuizzes,
         .mainpage{
             width:1065px;
         }
     }
     @media screen and (min-width: 1600px){
+        .userEmptyQuizzes,
         .mainpage{
             width:1420px;
         }
     }
     @media screen and (min-width: 1900px){
+        .userEmptyQuizzes,
         .mainpage{
             width: 1775px;
         }
@@ -42,7 +46,7 @@
 .quizzCreationGeneralInfos{
     width: 100%;
 }
-.quizzCreationContainer{
+.box{
     max-width: 676px;
 }
 .btn{
