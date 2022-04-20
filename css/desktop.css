@@ -1,0 +1,42 @@
+.navContainer{
+    justify-content: left;
+}
+
+.mainpage{
+    justify-content: left;
+    display:flex;
+}
+/*Desktop Width = (nDeQuizz x 340px) + ((nDeQuizz - 1) x 15px)*/
+/*esses mediaquery servem p sempre ter um espaço completo */
+    @media screen and (min-width: 1100px){
+        .mainpage{
+            width:710px;
+        }
+    }
+    @media screen and (min-width: 1400px){
+        .mainpage{
+            width:1065px;
+        }
+    }
+    @media screen and (min-width: 1600px){
+        .mainpage{
+            width:1420px;
+        }
+    }
+    @media screen and (min-width: 1900px){
+        .mainpage{
+            width: 1775px;
+        }
+    }
+    .mainpage ul{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: left;
+    }
+        .mainpage li{
+            margin-right: 15px;
+        }
+
+
+    

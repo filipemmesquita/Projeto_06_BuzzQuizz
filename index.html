@@ -5,18 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BuzzQuizz</title>
-    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet"  href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" media="screen and (max-width: 1100px)" href="css/mobile.css">
+    <link rel="stylesheet" media="screen and (min-width: 1100px)" href="css/desktop.css">
+
 </head>
 <body>
     <header class="topBar"> <!--Feito-->
         <h1>BuzzQuizz</h1>
     </header>
     <!--tela 1-->
-    <main class="mainpage">
+    <main class="mainpage active">
         <div class="userQuizzes">
-            <section class="userEmptyQuizzes "> <!--Enquanto o usuário não tiver nenhum quizz-->
+            <section class="userEmptyQuizzes active"> <!--Enquanto o usuário não tiver nenhum quizz-->
                 <h2>Você não criou nenhum quizz ainda :(</h2>
                 <button class="createQuizz">Criar Quizz</button>
             </section>
@@ -37,9 +39,21 @@
                 </ul>
             </section>
         </div>
-        <section class="all-quizzes">
+        <section class="allQuizzes">
             <h1>Todos os Quizzes</h1>
-            <ul class="other-quizzes">
+            <ul class="otherQuizzes">
+                <li class="quizz"> <!--Botar por HREF dps-->
+                    <img class="quizzThemeImg" src="imagens/123.jpg" alt="">
+                    <h2>Acerte os personagens correto de irmão do Jorel</h2>
+                </li>
+                <li class="quizz"> <!--Botar por HREF dps-->
+                    <img class="quizzThemeImg" src="imagens/123.jpg" alt="">
+                    <h2>Acerte os personagens correto de irmão do Jorel</h2>
+                </li>
+                <li class="quizz"> <!--Botar por HREF dps-->
+                    <img class="quizzThemeImg" src="imagens/123.jpg" alt="">
+                    <h2/h2>Acerte os personagens correto de irmão do Jorel</h2>
+                </li>
                 <li class="quizz"> <!--Botar por HREF dps-->
                     <img class="quizzThemeImg" src="imagens/123.jpg" alt="">
                     <h2>Acerte os personagens correto de irmão do Jorel</h2>
@@ -56,7 +70,7 @@
         </section>
     </main>
     <!--tela 2-->
-    <main class="quizzPage active">
+    <main class="quizzPage">
         <img class="quizzPageImg" src="imagens/Rectangle 34 (1).png" alt="">
         <section class="quizzQuestion">
             <div class="quizzQuestionContainer">
@@ -104,7 +118,7 @@
         <button class="homeButton">Voltar para home</button>
     </main>
     <!--tela 3-->
-    <main class="quizzCreation active">
+    <main class="quizzCreation">
         <h1 class="infos"> <!--Ideia é mudar o html pelo JS-->
             Comece pelo começo
         </h1>

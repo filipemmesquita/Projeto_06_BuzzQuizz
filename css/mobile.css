@@ -1,0 +1,9 @@
+.navContainer{
+    justify-content: space-between;
+}
+.mainpage ul{
+    flex-direction: column;
+}
+.mainpage{
+    max-width:340px;
+}

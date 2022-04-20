@@ -92,15 +92,17 @@ main h1{
 .mainpage{
     /*Desktop Width = (nDeQuizz x 340px) + ((nDeQuizz - 1) x 15px)*/
     padding-top: 100px;
-    width: 340px;
+    min-width: 340px;
+    width: 100%;
 }
 /*Quizz-Empty*/
 .userQuizzes{
     padding-bottom: 31px;
+    width:100%;
 }
 .userEmptyQuizzes{
     padding: 40px 0 33px 0;
-    width: 340px;
+    width: 100%;
     height: 181px;
     background: #FAFAFA;
     border: 1px dashed #D5D5D5;
@@ -140,13 +142,14 @@ main h1{
 .userAllQuizzes{
     display: none;
     flex-direction: column;
+    width:100%;
 }
 .navContainer{
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
-.quizzByUser{
+
+.mainpage ul{
     display: flex;
     flex-direction: column;
 }
@@ -154,6 +157,7 @@ main h1{
     color: #EC362D;
     width: 31px;
     height: 31px;
+    margin-left: 17px;
 }
 /*Main Quizz-Page*/
 .quizzPageImg{
