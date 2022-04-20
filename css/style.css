@@ -329,15 +329,13 @@ main h1{
         flex-direction: column;
         justify-content: space-between;
     }
-.quizzCreationQuestions > section{
-    margin-bottom: 24px;
-}   .quizzCreationQuestions > section:last-of-type{
-        margin-bottom: 0px;
-    }
+    .description{
+        height: 177px;
+    } /*Input de Level*/
 .box{
-    padding: 21px 15px;   
+    padding: 21px 15px;
     width: 100%;
-    margin: 0 auto;
+    margin: 0 auto 24px auto;
     background: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -346,62 +344,50 @@ main h1{
     justify-content: center;
 }
 /*Section GeneralInfos*/
-.generalInfos > input{
-    margin: 7.5px 0;
-}   .generalInfos > input:first-of-type{
-    margin-top: 0px;
-    } 
-    .generalInfos > input:last-of-type{
-        margin-bottom: 0px;
-    }     
-/*Section QuizzCreation - Questions!*/
-.quizzCreationQuestions{
-    width: 100%;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-}
-.quizzCreationInfos{/*Aparecer no onclick*/
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    scroll-margin-top: 140px;
-}
-.quizzCreationInfo > div:last-child{
-    margin-bottom: 0px;
-}
-.questionTitle{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-/*Levels*/
+/*Section QuizzCreation - GeneralInfos, Questions e Level*/
+.quizzCreationQuestions,
 .quizzCreationLevels{
     width: 100%;
     display: none;
     flex-direction: column;
     align-items: center;
-}
-.quizzCreationLevels > div{
-    margin-bottom: 24px;
-
-}
-.level{
+}/*Mobile Design*/
+.quizzCreationInfos{
+    display: none;
+    flex-direction: column;
     width: 100%;
-}
+    scroll-margin-top: 140px;
+}/*Aparecer no onclick*/
+.quizzCreationInfo > div:last-child{
+    margin-bottom: 0px;
+}/*Questions - Layout*/
+.questionTitle,
 .levelTitle{
+    width: 100%;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-}
-.levelTitle h1{
-    margin-bottom: 12px;
-}
-.description{
-    height: 177px;
-}
+    align-items: center;
+}/*Design Title*/
+.generalInfos:last-of-type,
+.question:last-of-type,
+.level:last-of-type{
+    margin-bottom: 0px;
+}/*Não interferir no Padding da do Butão*/
+.generalInfos input,
+.level input{
+    margin: 7.5px 0;
+}   .generalInfos input:first-of-type{
+        margin-top: 0px;
+    }  /*Não interferir no Padding da Box*/
+    .level input:first-of-type{
+        margin-top: 15px;
+    } /*Margin Correta para o primeiro input*/
+    .generalInfos input:last-of-type,
+    .level input:last-of-type{
+        margin-bottom: 0px;
+    } /*Não interferir no Padding da Box*/
+/*Section Finish*/
 .quizzCreationFinish{
     width: 100%;
     display: none;
@@ -419,5 +405,3 @@ main h1{
 .active{ /*Para testes!*/
     display: flex;
 }
-
-

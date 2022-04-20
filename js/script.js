@@ -68,7 +68,7 @@ function questionsGenerator(infos){
    }
    CreateQuestionsPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
    CreateQuestionsPage.querySelector(`.open-icon`).classList.toggle(`active`)
-   CreateQuestionsPage.innerHTML += `<button class="proceedToLevels btn">Prosseguir para criar níveis</button>`
+   CreateQuestionsPage.innerHTML += `<button class="proceedToLevels btn" onclick="quizzCreatorProceed(this)">Prosseguir para criar níveis</button>`
 }
 function questionSection(i){
     return `
