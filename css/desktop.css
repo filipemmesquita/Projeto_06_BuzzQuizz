@@ -39,6 +39,14 @@
 .quizzPageImg{
     max-height: 227px;
 }
-
+.quizzCreationGeneralInfos{
+    width: 100%;
+}
+.quizzCreationContainer{
+    max-width: 676px;
+}
+.btn{
+    max-width: 367px;
+}
 
     

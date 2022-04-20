@@ -10,3 +10,9 @@
 .quizzPageImg{
 max-height: 147px;
 }
+.quizzCreationContainer{
+    height: 100%;
+}
+.btn{
+    max-width: 320px;
+}

@@ -35,6 +35,9 @@ button{ /*Resetar o css default do button*/
     text-align: center;
     justify-content: center;
     color: #FFF5F4;
+    width:100%;
+    height:54px;
+    margin:15px;
 }
 /*Header - TopBar - Feito*/
 .topBar{
@@ -300,17 +303,16 @@ main .quizzcreation{
     align-items: center;
     color: #000000;
 }
-.quizzcreation-general-infos{
+.quizzCreationGeneralInfos{
     width: 100%;
     display: none;
     flex-direction: column;
     align-items: center;
 }
-.quizzcreation-container{
-    padding: 21px 0 15px 0;
-    margin: 0 auto;
+.quizzCreationContainer{
+    padding: 21px 15px;   
     width: 100%;
-    height: 100%;
+    margin: 0 auto;
     background: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -318,10 +320,10 @@ main .quizzcreation{
     align-items: center;
     justify-content: center;
 }
-.inputinfos{
+.inputInfos{
     padding: 13px 0 11px 14px;
     margin-bottom: 9px;
-    width: 341px;
+    width: 100%;
     height: 46px;
     background: #FFFFFF;
     border: 1px solid #D1D1D1;
@@ -344,45 +346,47 @@ main .quizzcreation{
     align-items: center;
     color: #000000;
 }
-.quizzcreation-questions{
+.quizzCreationQuestions{
     width: 100%;
     display: none;
     flex-direction: column;
     align-items: center;
 }
-.questioninfo,
-.right-answer,
-.wrong-answer > div{
+.questionInfo,
+.rightAnswer,
+.wrongAnswer > div{
     display: flex;
     flex-direction: column;
-
+    width:100%;
 }
-.questioninfo,
-.right-answer{
+.wrongAnswer{
+    width:100%;
+}
+.questionInfo,
+.rightAnswer{
     margin-bottom: 28px;
 }
-.questioninfo h1,
-.right-answer h1,
-.wrong-answer h1{
+.questionInfo h1,
+.rightAnswer h1,
+.wrongAnswer h1{
     margin-bottom: 14px;
 }
-.quizzcreation-questions > div{
+.quizzCreationQuestions > div{
     margin-bottom: 24px;
 }
-.wrong-answer > div{
+.wrongAnswer > div{
     margin-bottom: 25px;
 }
-.wrong-answer > div:last-child{
+.wrongAnswer > div:last-child{
     margin-bottom: 0;
 }
-.questiontitle{
-    width: 340px;
+.questionTitle{
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .open-icon{
-    display: none;
     width: 26px;
     height: 26px;
 }
@@ -390,36 +394,44 @@ main .quizzcreation{
     margin-bottom: 40px;
 }
 /*Levels*/
-.quizzcreation-levels{
+.quizzCreationLevels{
     width: 100%;
     display: none;
     flex-direction: column;
     align-items: center;
 }
-.quizzcreation-levels > div{
+.quizzCreationLevels > div{
     margin-bottom: 24px;
 
 }
 .level{
-    width: 340px;
+    width: 100%;
 }
-.leveltitle{
+.levelTitle{
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-.leveltitle h1{
+.levelTitle h1{
     margin-bottom: 12px;
 }
 .description{
     height: 177px;
 }
-.quizzcreation-finish{
+.quizzCreationFinish{
     width: 100%;
     display: none;
     align-items: center;
     flex-direction: column;
 }
+    .quizzCreationFinish div{
+        background-image: url("../imagens/Rectangle 34 (1).png");
+        height: 181px;
+        width: 340px;
+        background-position: center; 
+        background-repeat: no-repeat; 
+        background-size: cover;
+    }
 .active{ /*Para testes!*/
     display: flex;
 }
