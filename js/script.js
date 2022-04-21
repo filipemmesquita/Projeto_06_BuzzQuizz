@@ -1,7 +1,8 @@
 const globalCreatedQuizz ={
     title: "",
     image: "",
-    questions: []
+    questions: [],
+    levels: []
 }
 let main = (page) => document.querySelectorAll(`main`)[page].classList.toggle(`active`)
 function quizzCreator(){
@@ -255,7 +256,6 @@ function levelsGenerator(infos){
     </section>
     `
 }
-const level = []
 function levelValidation(){
     const AllLevels = document.querySelectorAll(`.level`)
     for(let i = 0; i < AllLevels.length; i++){
@@ -273,12 +273,12 @@ function levelValidation(){
         }if(levelDescription.length < 30){
             return false
         }
-        level.push({
+        globalCreatedQuizz.levels.push={
             title: levelTitle,
             image:  levelURL,
             text:   levelDescription,
             minValue: levelPercentage,
-        })
+        }
     }
     return true
 }
