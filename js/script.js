@@ -9,41 +9,48 @@ function quizzCreator(){
     main(2)
 }
 function homeButton(element){
-    switch (element.parentNode.classList[0]){
-        case "quizzPage":
-            main(2)
-            main(0)
-            break;
-        case "quizzCreationFinish":
-            main(3)
-            main(0)
-            break;
+    const home = element.parentNode.classList[0];
+    if(home === "quizzpage"){
+        main(2);
+        main(0);
+    }
+    if(home === "quizzCreationFinish"){
+        main(2);
+        main(0);
     }
 }
 let quizzCreatorChangePages = (pages) => document.querySelectorAll(".quizzCreation > section")[pages].classList.toggle("active")
 function quizzCreatorProceed(element){
     let infosText = document.querySelector(`.infos`)
     const el = element.classList[0]
-        if(el === "proceedToQuestions"){
-            if(infosValidation()){
-                infosText.innerHTML = "Crie suas perguntas"
-                quizzCreatorChangePages(0)
-                quizzCreatorChangePages(1)
-                questionsGenerator(infosValidation())
-            } else {
-                alert(`Usuário, digite os dados corretamente`)
-            }
+    if(el === "proceedToQuestions"){
+        if(infosValidation()){
+            infosText.innerHTML = "Crie suas perguntas"
+            quizzCreatorChangePages(0)
+            quizzCreatorChangePages(1)
+            questionsGenerator(infosValidation())
+        } else {
+            alert(`Usuário, digite os dados corretamente`)
         }
-        if(el === "proceedToLevels"){
-            if(questionsValidation()){
-                infosText.innerHTML = "Agora, decida os níveis"
-                quizzCreatorChangePages(1)
-                quizzCreatorChangePages(2)
-                levelGenerator(questionsValidation())
-            } else {
-                alert(`Usuário, digite os dados corretamente`)
-            }
+    }
+    if(el === "proceedToLevels"){
+        if(questionsValidation()){
+            infosText.innerHTML = "Agora, decida os níveis"
+            quizzCreatorChangePages(1)
+            quizzCreatorChangePages(2)
+            levelsGenerator(infosValidation())
+        } else {
+            alert(`Usuário, digite os dados corretamente`)
         }
+    }if(el === "proceedToFinish"){
+        if(levelValidation()){
+            infosText.innerHTML = "Seu quizz está pronto!"
+            quizzCreatorChangePages(2)
+            quizzCreatorChangePages(3)
+        } else {
+            alert(`Usuário, digite os dados corretamente`)
+        }
+    }
 }
 function infosValidation(){
     const allInfoInputs = document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
@@ -112,31 +119,31 @@ function questionSection(i){
     ` //Nas repostas incorretas as vezes da para fazer um loop
 }
 function descriptionToggle(element){
-    const identifier = element.parentNode
+    const identifier = element.parentNode;
     let allElementIcons;
     let minimize;
     let inputDiv;
     switch (identifier.classList[0]){
         case "questionTitle":
             allElementIcons = document.querySelectorAll(`.quizzCreationQuestions .open-icon`);
-            minimize = document.querySelectorAll(`.quizzCreationInfos`);
-            inputDiv = identifier.parentNode.querySelector(`.quizzCreationInfos`)
+            minimize = document.querySelectorAll(`.question`);
+            inputDiv = identifier.parentNode.querySelector(`.quizzCreationInfos`);
             break;
         case "levelTitle":
             allElementIcons = document.querySelectorAll(`.quizzCreationLevels .open-icon`);
-            minimize = document.querySelectorAll(`.levels`);
-            inputDiv = identifier.parentNode.querySelector(``)
+            minimize = document.querySelectorAll(`.level`);
+            inputDiv = identifier.parentNode.querySelector(`.quizzCreationInfos`);
             break;
     }
     for(let i = 0; i < allElementIcons.length; i++){
         if(allElementIcons[i].classList.contains("active")){
         } else {
-            allElementIcons[i].classList.toggle(`active`)
-            minimize[i].classList.toggle(`active`)
+            allElementIcons[i].classList.toggle(`active`);
+            minimize[i].querySelector(`.quizzCreationInfos`).classList.toggle(`active`);
         }
     }
-    inputDiv.classList.toggle(`active`)
-    element.classList.toggle(`active`)
+    inputDiv.classList.toggle(`active`);
+    element.classList.toggle(`active`);
     inputDiv.scrollIntoView({block: 'start', behavior: 'smooth', inline: 'start'});
 }
 function isHexColor(str){
@@ -224,13 +231,57 @@ function questionsValidation(){
     }
     console.log(globalCreatedQuizz)
 }
-function levelGenerator(infos){
-    const questionNumbers = infos.questionamount
-    let CreateQuestionsPage = document.querySelector(`.quizzCreationQuestions`)
-    for(let i = 1; i < questionNumbers + 1; i++){
-         CreateQuestionsPage.innerHTML += questionSection(i)
+//Cria os Levels
+function levelsGenerator(infos){
+    const levelNumbers = infos.levelamount
+    let CreateLevelPage = document.querySelector(`.quizzCreationLevels`)
+    for(let i = 1; i < levelNumbers + 1; i++){
+        CreateLevelPage.innerHTML += levelSection(i)
     }
-    CreateQuestionsPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
-    CreateQuestionsPage.querySelector(`.open-icon`).classList.toggle(`active`)
-    CreateQuestionsPage.innerHTML += `<button class="proceedToLevels btn">Prosseguir para criar níveis</button>`
+    CreateLevelPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
+    CreateLevelPage.querySelector(`.open-icon`).classList.toggle(`active`)
+    CreateLevelPage.innerHTML += `<button class="proceedToFinish btn" onclick="quizzCreatorProceed(this)">Finalizar Quizz</button>`
  }
+ function levelSection(i){
+    return `
+    <section class="level box">
+        <div class="levelTitle">
+            <h1>Nivel ${i}</h1>
+            <ion-icon class="open-icon active" name="open-outline" onclick="descriptionToggle(this)"></ion-icon>
+        </div>
+        <div class="quizzCreationInfos">
+            <input class="inputInfos" type="text" placeholder="Título do nível">
+            <input class="inputInfos" type="text" placeholder="% de acerto mínima">
+            <input class="inputInfos" type="text" placeholder="URL da imagem do nível">
+            <input class="inputInfos description" type="text" placeholder="Descrição do nível">
+        </div>
+    </section>
+    `
+}
+const level = []
+function levelValidation(){
+    const AllLevels = document.querySelectorAll(`.level`)
+    for(let i = 0; i < AllLevels.length; i++){
+        const AllLevelInputs = AllLevels[i].querySelectorAll(`.inputInfos`)
+        const levelTitle = AllLevelInputs[0].value
+        const levelPercentage = Number(AllLevelInputs[1].value)
+        const levelURL = AllLevelInputs[2].value
+        const levelDescription = AllLevelInputs[3].value
+        if(levelTitle.length < 10){
+            return false
+        }if(levelPercentage < 0 || levelPercentage > 100){
+            return false
+        }if(levelURL.substring(0,8)!=="https://"){
+            return false
+        }if(levelDescription.length < 30){
+            return false
+        }
+        level.push({
+            title: levelTitle,
+            image:  levelURL,
+            text:   levelDescription,
+            minValue: levelPercentage,
+        })
+    }
+    return true
+}
