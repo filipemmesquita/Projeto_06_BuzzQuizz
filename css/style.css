@@ -210,12 +210,14 @@ main h1{
             }
 /*Main > Quizz-Page > ResultScreen (Tela-2)*/
 .quizzResult{
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
 }   .quizzResult .quizzBox{
         padding: 18px;
         height: 100%;
+        display: flex;
+        flex-direction: column;
     }   /*QuestionScreen - Header*/
         .quizzResultTitle{
             width: 100%;
@@ -230,6 +232,7 @@ main h1{
         .resultDescription{
             margin-top: 18px;
             display: flex;
+            flex-direction:row;
             justify-content: space-between;
         }   .resultDescription img{
                 width: 364px;

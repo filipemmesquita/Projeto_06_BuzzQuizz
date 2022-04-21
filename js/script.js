@@ -437,9 +437,47 @@ function isRight(element){
         } else {
             alternativesText.classList.add(`wrongAnswer`)
         }
-        console.log(isAnswerRight[i].isCorrectAnswer)
+    }
+    const infos = QuizzInfos().data
+    //Teoricamente seria a função do game, porém como o resultado varia de acordo com % de acertos, a section Resultado só pode ser criada quando o Quizz é totalmente respondido!!!!
+    //Possivelmente da para fazer isso como uma função separada!!
+    const amountOfQuestions = document.querySelectorAll(`.quizzQuestion`) //Saber quantas questões tem
+    const allRightAnswers = document.querySelectorAll(`.rightAnswer`) //Saber se todas as questões foram respondias, pois apenas 1 alternativa está certa por SectionQuestion, logo da para usar como comparação! Obs: da tbm para usar o atributo como comparação tbm, pois o mesmo fica zerado quando todas respostas foram respondidas!
+    if(amountOfQuestions.length === allRightAnswers.length){//Para saber se o jogo acabou
+        console.log(`apareci`)
+        let rightAnswerByUser = 0 //Quantidade de Acertos!
+        for(let x = 0; x < allRightAnswers.length; x++){//Para saber se o usuario acertou ou não
+            if(allRightAnswers[x].parentNode.classList.contains(`opacity`)){//quer dizer que errou a questão, pois se ele acerta a reposta não ganha opacidade!
+            } else {//Se não tiver opacity, aumenta a quantidade de acertos!
+                rightAnswerByUser++
+            }
+        }
+        //Porcentagem de Acerto!
+        const percentageByUser = (rightAnswerByUser / allRightAnswers.length) * 100
+        const AllLevels = infos.levels
+        console.log(AllLevels)
+        let zIndice;
+        for(let z = 0; z < AllLevels.length; z++){//Saber quantos niveis tem/saber qual o usuario se encaixa
+            console.log(AllLevels[z].minValue)
+            console.log(AllLevels.length)
+            console.log(percentageByUser)
+            if(AllLevels[z].minValue <= percentageByUser){
+                console.log(AllLevels[z].minValue <= percentageByUser)
+                zIndice = z //Armazena em qual level o jogador ficou!
+            }
+        }
+        
+        const quizzPage = document.querySelector(`.quizzPage`)
+        quizzPage.innerHTML += sectionQuizzResult() //Falta colocar os onclick!!!
+        const resultContent = document.querySelector(`.quizzResult .quizzBox`);
+        resultContent.innerHTML = quizzResultContent(AllLevels[zIndice], percentageByUser);
+        document.querySelector(`.quizzResult`).classList.add(`active`)
+        
+
     }
 }
+
+
 function questionClick(element){
     const questionClicked = element.parentNode.parentNode;
     const allQuestion = document.querySelectorAll(`.quizzQuestion`)
@@ -460,9 +498,10 @@ function sectionQuizzResult(){
     `
 }
 function quizzResultContent(levels, percentageByUser){
+    const userPercentage = percentageByUser.toFixed(0);
     return `
     <div class="quizzResultTitle">
-        <h1 class="quizzTopTitle">${percentageByUser}% de acerto: ${levels.title}</h1>
+        <h1 class="quizzTopTitle">${userPercentage}% de acerto: ${levels.title}</h1>
     </div>
     <div class="resultDescription">
         <img src="${levels.image}" alt="">
