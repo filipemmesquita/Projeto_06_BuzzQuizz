@@ -321,8 +321,8 @@ function renderQuizzes(allQuizzes){
     userQuizzesRenders.innerHTML=""
     for(x=0;x<allUserQuizzes.length;x++){
     userQuizzesRenders.innerHTML+=`
-    <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}')";> 
-        <div>
+    <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
+        <div id="${allUserQuizzes[x].id}" onclick="quizzProceed(this)">
         <h2>${allUserQuizzes[x].title}</h2>
         </div>
     </li>`
@@ -335,12 +335,10 @@ function renderQuizzes(allQuizzes){
     otherQuizzesRenders.innerHTML="";
     for(x=0;x<allOtherQuizzes.length;x++){
     otherQuizzesRenders.innerHTML+=`
-<li class="quizz" style="background-image: url('${allOtherQuizzes[x].image}')";> 
-    <div>
+<li class="quizz"  style="background-image: url('${allOtherQuizzes[x].image}');"> 
+    <div id="${allOtherQuizzes[x].id}" onclick="startQuizz(this)">
     <h2>${allOtherQuizzes[x].title}</h2>
     </div>
 </li>`
     }
-
-
 }
