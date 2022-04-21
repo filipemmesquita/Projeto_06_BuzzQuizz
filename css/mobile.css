@@ -1,3 +1,85 @@
+/*Buttons*/
+.btn{
+    margin: 20px 0 10px 0;
+    width:220px;
+    height:44px;
+}
+/*Main Quizz-Page (Tela-2)*/
+.quizzBox{
+    margin-top: 25px;
+    padding: 18px;
+    width: 375px;
+    height: 100%;
+}   .quizzQuestionTitle{
+        width: 100%;
+        height: 89px;
+    } .quizzTopTitle{
+        width: 308px;
+        font-size: 19px;
+        line-height: 22px;
+    }
+.allAlternatives{
+    width: 338px;
+}   .quizzAlternative{
+        margin-top: 12px;
+        width: 163px;
+        height: 134px;
+    }   .quizzAlternative img{
+            width: 100%;
+            height: 113px;
+        } .quizzAlternative h2{
+            font-size: 13px;
+            line-height: 15px;
+        }
+/*Main > Quizz-Page > ResultScreen (Tela-2)*/
+.quizzResult{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}   .quizzResult .quizzBox{
+        padding: 18px;
+        height: 100%;
+    }   .quizzResultTitle{
+            width: 100%;
+            height: 99px;
+            background-color: red;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .resultDescription{
+            margin-top: 0;
+            flex-direction: column;
+        }   .resultDescription img{
+                margin: 9px 0;
+                width: 100%;
+                height: 255px;
+            }
+            .resultDescription h2{
+                width: 100%;
+                font-size: 17px;
+                line-height: 20px;
+            }
+/*Main > Quizz-Creation > All*/
+.quizzCreation  .btn{
+    width: 320px;
+    height: 55px;
+}
+.box{
+    width: 375px;
+}
+
+
+
+
+
+
+
+
+
+
+
 .navContainer{
     justify-content: space-between;
 }

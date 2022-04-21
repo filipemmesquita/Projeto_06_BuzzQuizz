@@ -16,13 +16,13 @@
         <h1>BuzzQuizz</h1>
     </header>
     <!--tela 1-->
-    <main class="mainpage">
-        <div class="userQuizze">
+    <main class="mainpage ">
+        <div class="userQuizzes">
             <section class="userEmptyQuizzes active">
                 <h2 class="emptyText">Você não criou nenhum quizz ainda :(</h2>
                 <button class="createQuizz" onclick="quizzCreator()">Criar Quizz</button>
             </section>
-            <section class="userAllQuizzes"> <!--Quando usuário tiver 1 quizz-->
+            <section class="userAllQuizzes "> <!--Quando usuário tiver 1 quizz-->
                 <nav class="navContainer">
                     <h1>Seus Quizzes</h1>
                     <ion-icon class="createQuizzIcon" name="add-circle" onclick="quizzCreator()"></ion-icon>
@@ -72,80 +72,65 @@
     <!--tela 2-->
     <main class="quizzPage ">
         <img class="quizzPageImg" src="imagens/Rectangle 34 (1).png" alt="">
-        <section class="quizzQuestionList">
-            <div class="quizzQuestionContainer">
-                <div class="quizzQuestionTitle q1">
-                    <h1>Em qual animal Olho-Tonto Moody transfigurou Malfoy?</h1>
-                </div>
-                <section class="alternatives">
-                    <ul class="alternativesSideLeft">
-                        <li class="choise">
-                            <img class="alternativeImg" src="imagens/image 3.png" alt="gato">
-                            <h2 class="aleternative-description">Gatíneo</h2>
-                        </li>
-                        <li class="choise">
-                            <img class="alternative" src="imagens/image 4.png" alt="rato">
-                            <h2 class="aleternative-description">Ratata</h2>
-                        </li>
-                    </ul>
-                    <ul class="alternativesSideRight">
-                        <li class="choise">
-                            <img class="alternativeImg" src="imagens/image 7.png" alt="sapo">
-                            <h2 class="aleternative-description">Sapo Gordo</h2>
-                        </li>
-                        <li class="choise">
-                            <img class="alternativeImg" src="imagens/image 8.png" alt="furão">
-                            <h2 class="aleternative-description">Mustela putorius (o Furão)</h2>
-                        </li>
-                    </ul>
-                </section>
-                
+        <section class="quizzQuestion quizzBox">
+            <div class="quizzQuestionTitle">
+                <h1 class="quizzTopTitle">Em qual animal Olho-Tonto Moody transfigurou Malfoy?</h1>
             </div>
-            <div class="quizzQuestionContainer">
-                <div class="quizzQuestionTitle q1">
-                    <h1>Em qual animal Olho-Tonto Moody transfigurou Malfoy?</h1>
-                </div>
-                <section class="alternatives">
-                    <ul class="alternativesSideLeft">
-                        <li class="choise">
-                            <img class="alternativeImg" src="imagens/image 3.png" alt="gato">
-                            <h2 class="aleternative-description">Gatíneo</h2>
-                        </li>
-                        <li class="choise">
-                            <img class="alternative" src="imagens/image 4.png" alt="rato">
-                            <h2 class="aleternative-description">Ratata</h2>
-                        </li>
-                    </ul>
-                    <ul class="alternativesSideRight">
-                        <li class="choise">
-                            <img class="alternativeImg" src="imagens/image 7.png" alt="sapo">
-                            <h2 class="aleternative-description">Sapo Gordo</h2>
-                        </li>
-                        <li class="choise">
-                            <img class="alternativeImg" src="imagens/image 8.png" alt="furão">
-                            <h2 class="aleternative-description">Mustela putorius (o Furão)</h2>
-                        </li>
-                    </ul>
-                </section>
-                
-            </div>
-            
+            <ul class="allAlternatives">
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+            </ul>
         </section>
-        <div class="results">
-            <section class="quizzResult -">
-                <div class="quizzResultContainer">
-                    <div class="quizzResultTitle q2">
-                        <h1>88% de acerto: Você é praticamente um aluno de Hogwarts!</h1>
-                    </div>
-                    <div class="quizzResultDescription">
-                        <img src="imagens/image 10.png" alt="">
-                        <h2>Parabéns Potterhead! Bem-vindx a Hogwarts, aproveite o loop infinito de comida e clique no botão abaixo para usar o vira-tempo e reiniciar este teste.</h2>
-                    </div>
+        <section class="quizzQuestion quizzBox">
+            <div class="quizzQuestionTitle">
+                <h1 class="quizzTopTitle">Em qual animal Olho-Tonto Moody transfigurou Malfoy?</h1>
+            </div>
+            <ul class="allAlternatives">
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+                <li class="quizzAlternative">
+                    <img src="imagens/image 3.png" alt="">
+                    <h2>Gatinho</h2>
+                </li>
+            </ul>
+        </section>
+        <section class="quizzResult">
+            <div class="quizzBox">
+                <div class="quizzResultTitle">
+                    <h1 class="quizzTopTitle">88% de acerto: Você é praticamente um aluno de Hogwarts!</h1>
                 </div>
-            </section>
-        </div>
-        <button class="again btn">Reiniciar Quizz</button>
-        <button class="homeButton" onclick="homeButton(this)">Voltar para home</button>
+                <div class="resultDescription">
+                    <img src="imagens/image 10.png" alt="">
+                    <h2>Parabéns Potterhead! Bem-vindx a Hogwarts, aproveite o loop infinito de comida e clique no botão abaixo para usar o vira-tempo e reiniciar este teste.</h2>
+                </div>
+            </div>
+            <button class="restartQuizz btn">Reiniciar Quizz</button>
+            <button class="homeButton">Voltar Home</button>
+        </section>
     </main>
     <!--tela 3-->
     <main class="quizzCreation active">
@@ -165,13 +150,13 @@
         </section>
         <section class="quizzCreationLevels">
         </section>
-        <section class="quizzCreationFinish">
+        <section class="quizzCreationFinish ">
             <div>
             <h2>O quão potterhead é você?</h2>
             </div>
             
             <button class="quizzAccess btn">Acessar Quizz</button>
-            <button class="homeButton">Voltar para home</button>
+            <button class="homeButton" onclick="homeButton(this)">Voltar para home</button>
         </section>
     </main>
     <script src="js/script.js"></script>

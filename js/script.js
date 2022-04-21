@@ -9,15 +9,14 @@ function quizzCreator(){
     main(2)
 }
 function homeButton(element){
-    switch (element.parentNode.classList[0]){
-        case "quizzPage":
-            main(2)
-            main(0)
-            break;
-        case "quizzCreationFinish":
-            main(3)
-            main(0)
-            break;
+    const home = element.parentNode.classList[0];
+    if(home === "quizzpage"){
+        main(2);
+        main(0);
+    }
+    if(home === "quizzCreationFinish"){
+        main(2);
+        main(0);
     }
 }
 let quizzCreatorChangePages = (pages) => document.querySelectorAll(".quizzCreation > section")[pages].classList.toggle("active")
