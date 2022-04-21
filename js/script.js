@@ -1,3 +1,8 @@
+const globalCreatedQuizz ={
+    title: "",
+    image: "",
+    questions: [{}]
+}
 let main = (page) => document.querySelectorAll(`main`)[page].classList.toggle(`active`)
 function quizzCreator(){
     main(0) 
@@ -54,6 +59,8 @@ function infosValidation(){
     if(levelsAmount < 2){
         return false
     } 
+    globalCreatedQuizz.title=quizzTitle
+    globalCreatedQuizz.image=allInfoInputs[1]
     return {
         quizztitle: quizzTitle,
         questionamount: questionAmount,
@@ -157,41 +164,66 @@ function isHexColor(str){
 }
 function questionsValidation(){
     console.log("questions validation ativado")
-    const allQuestionInput = document.querySelectorAll(`.quizzCreationInfos .quizzCreationInputBox`)
-    const questionTitle = allQuestionInput[0]
-    const rightAnswer = allQuestionInput[1]
-    let wrongAnswerAmount=0;
-    console.log(questionTitle)
-    if(questionTitle.querySelectorAll(".inputInfos")[0].value.length < 20 ){
-        console.log("titulo menor que 20 caracteres")
-        return false
-    }
-    if(!isHexColor(questionTitle.querySelectorAll(".inputInfos")[1].value)){
-        console.log("não é cor")
-        return false
-    }
-    for(let x=1;x<allQuestionInput.length;x++){
-        const currentQuestionChecked = allQuestionInput[x].querySelectorAll(".inputInfos")
-        if(currentQuestionChecked[0].value!=="" ){
-            if(currentQuestionChecked[0].value.length<20){
-                console.log("texto da pergunta "+x + " muito curto")
-                return false
-            }
-            if(currentQuestionChecked[1].value.substring(0,9)!=="https://")
-            {
-                console.log("erro na url da pergunta "+x)
-                return false
-            }
-            if(x>1){
-                wrongAnswerAmount++;
+    const allQuestion= document.querySelectorAll(".question");
+    for(let y=0;y<allQuestion.length;y++){
+        const allQuestionInput = allQuestion[y].querySelectorAll(`.quizzCreationInputBox`)
+        const questionTitle = allQuestionInput[0]
+        let wrongAnswerAmount=0;
+        console.log(questionTitle)
+        if(questionTitle.querySelectorAll(".inputInfos")[0].value.length < 20 ){
+            console.log("titulo menor que 20 caracteres em y"+y)
+            return false
+        }
+        if(!isHexColor(questionTitle.querySelectorAll(".inputInfos")[1].value)){
+            console.log("não é cor em y"+y)
+            return false
+        }
+        for(let x=1;x<allQuestionInput.length;x++){
+            const currentQuestionChecked = allQuestionInput[x].querySelectorAll(".inputInfos")
+            if(currentQuestionChecked[0].value!=="" ){
+                if(currentQuestionChecked[0].value.length<20){
+                    console.log("texto da pergunta "+x + " muito curto em y"+y)
+                    return false
+                }
+                if(currentQuestionChecked[1].value.substring(0,8)!=="https://")
+                {
+                    console.log("erro na url da pergunta "+x +" em y"+y)
+                    return false
+                }
+                if(x>1){
+                    wrongAnswerAmount++;
+                }
             }
         }
+        if (wrongAnswerAmount===0){
+            console.log("0 respostas erradas em y"+y)
+            return false
+        }
+        globalCreatedQuizz.questions=[
+            {
+                title:questionTitle.querySelectorAll(".inputInfos")[0].value,
+                color:questionTitle.querySelectorAll(".inputInfos")[1].value,
+                answers:[{}]
+            }
+        ]
+        globalCreatedQuizz.questions.answers=[
+            {
+                text: allQuestionInput[1].querySelectorAll(".inputInfos")[0].value,
+                image: allQuestionInput[1].querySelectorAll(".inputInfos")[1].value,
+                isCorrectAnswer:true
+            }
+        ]
+        for(let x=2;x<wrongAnswerAmount;x++){
+            globalCreatedQuizz.questions.answers=[
+                {
+                    text: allQuestionInput[x].querySelectorAll(".inputInfos")[0].value,
+                    image: allQuestionInput[x].querySelectorAll(".inputInfos")[1].value,
+                    isCorrectAnswer:false
+                }
+            ]
+        }  
     }
-    if (wrongAnswerAmount===0){
-        console.log("0 respostas erradas")
-        return false
-    }
-    console.log(allQuestionInput)
+    console.log(globalCreatedQuizz)
 }
 function levelGenerator(infos){
     const questionNumbers = infos.questionamount
