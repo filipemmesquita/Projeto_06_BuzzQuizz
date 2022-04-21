@@ -45,9 +45,13 @@ function quizzCreatorProceed(element){
         }
     }if(el === "proceedToFinish"){
         if(levelValidation()){
+            const promisse = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes",globalCreatedQuizz)
+            promisse.then(function(){
             infosText.innerHTML = "Seu quizz está pronto!"
             quizzCreatorChangePages(2)
-            quizzCreatorChangePages(3)
+            quizzCreatorChangePages(3)})
+            promisse.catch(catchError)
+
         } else {
             alert(`Usuário, digite os dados corretamente`)
         }
@@ -68,7 +72,7 @@ function infosValidation(){
         return false
     } 
     globalCreatedQuizz.title=quizzTitle
-    globalCreatedQuizz.image=allInfoInputs[1]
+    globalCreatedQuizz.image=allInfoInputs[1].value
     return {
         quizztitle: quizzTitle,
         questionamount: questionAmount,
@@ -228,6 +232,7 @@ function questionsValidation(){
         }  
     }
     console.log(globalCreatedQuizz)
+    return true
 }
 //Cria os Levels
 function levelsGenerator(infos){
@@ -281,4 +286,7 @@ function levelValidation(){
         }
     }
     return true
+}
+function catchError(error){
+    alert("Ocorreu um erro! codigo "+error.response.status)
 }
