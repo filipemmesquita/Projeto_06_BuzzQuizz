@@ -305,17 +305,17 @@ function requestRenderQuizzes(){
 }
 function renderQuizzes(allQuizzes){
     const otherQuizzesRenders=document.querySelector(".otherQuizzes")
-    const userQuizzesRenders=document.querySelector(".userAllQuizzes")
+    const userQuizzesRenders=document.querySelector(".quizzByUser")
     console.log(allQuizzes)
     //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
-    const userIds=4;
+    const userIds=1;
     const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
         return userIds===currentQuizz.id;
     })
     //checa se há há algum quizz do usuario
     if(allUserQuizzes.length>0){
         document.querySelector(".userEmptyQuizzes").classList.remove("active")
-        userQuizzesRenders.classList.add("active")
+        document.querySelector(".userAllQuizzes").classList.add("active")
     }
     //renderiza os quizzes do usuario
     userQuizzesRenders.innerHTML=""
