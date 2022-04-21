@@ -19,6 +19,7 @@ function homeButton(element){
         main(2);
         main(0);
     }
+    requestRenderQuizzes();
 }
 let quizzCreatorChangePages = (pages) => document.querySelectorAll(".quizzCreation > section")[pages].classList.toggle("active")
 function quizzCreatorProceed(element){
@@ -294,4 +295,48 @@ function levelValidation(){
 }
 function catchError(error){
     alert("Ocorreu um erro! codigo "+error.response.status)
+}
+
+
+function requestRenderQuizzes(){
+    promisse = axios.get("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes")
+    promisse.then(renderQuizzes)
+    promisse.catch(catchError)
+}
+function renderQuizzes(allQuizzes){
+    const otherQuizzesRenders=document.querySelector(".otherQuizzes")
+    const userQuizzesRenders=document.querySelector(".userAllQuizzes")
+    console.log(allQuizzes)
+    const userId=4;
+    const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
+        return userId===currentQuizz.id;
+    })
+    if(allUserQuizzes.length>0){
+        document.querySelector(".userEmptyQuizzes").classList.remove("active")
+        userQuizzesRenders.classList.add("active")
+    }
+    userQuizzesRenders.innerHTML=""
+    for(x=0;x<allUserQuizzes.length;x++){
+    userQuizzesRenders.innerHTML+=`
+    <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}')";> 
+        <div>
+        <h2>${allUserQuizzes[x].title}</h2>
+        </div>
+    </li>`
+    }
+    const allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
+        return userId!==currentQuizz.id;
+    })
+    console.log(allOtherQuizzes)
+    otherQuizzesRenders.innerHTML="";
+    for(x=0;x<allOtherQuizzes.length;x++){
+    otherQuizzesRenders.innerHTML+=`
+<li class="quizz" style="background-image: url('${allOtherQuizzes[x].image}')";> 
+    <div>
+    <h2>${allOtherQuizzes[x].title}</h2>
+    </div>
+</li>`
+    }
+
+
 }

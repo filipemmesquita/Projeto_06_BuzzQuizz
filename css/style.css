@@ -229,16 +229,20 @@ main h1{
             }
 /*Layout dos Quizz*/
 .quizz{ /*li -> quizz*/
-    padding-top: 14px; /*Para mobile*/
+    margin-top: 14px; /*Para mobile*/
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-size:cover;
+
+
 }
-    .quizzThemeImg{/*Source*/
+    .quizz div{/*Source*/
         width: 340px;
-        height: 181px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(image.png);
+        height: 181px;  
+
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%);;
         border-radius: 5px;
     }
     .quizz h2{ /*Titulo do Quizz*/
@@ -251,6 +255,7 @@ main h1{
         line-height: 22px;
         text-align: center;
         color: #FFFFFF;
+        word-wrap: break-word;
     }
 
 

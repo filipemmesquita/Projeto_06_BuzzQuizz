@@ -11,12 +11,12 @@
     <link rel="stylesheet" media="screen and (min-width: 1100px)" href="css/desktop.css">
 
 </head>
-<body>
+<body onload="requestRenderQuizzes()">
     <header class="topBar"> <!--Feito-->
         <h1>BuzzQuizz</h1>
     </header>
     <!--tela 1-->
-    <main class="mainpage ">
+    <main class="mainpage active">
         <div class="userQuizzes">
             <section class="userEmptyQuizzes active">
                 <h2 class="emptyText">Você não criou nenhum quizz ainda :(</h2>
@@ -133,7 +133,7 @@
         </section>
     </main>
     <!--tela 3-->
-    <main class="quizzCreation active">
+    <main class="quizzCreation ">
         <h1 class="infos"> <!--Ideia é mudar o html pelo JS-->
             Comece pelo começo
         </h1>
