@@ -148,14 +148,20 @@ main h1{
             flex-direction: column;
         }
 /*Main > Quizz-Page > QuestionScreen (Tela-2)*/
+.quizzPage{
+    scroll-margin-top: 100px;
+}
 .quizzBox{
     margin-top: 40px;
     padding: 37.5px;
     background: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     width: 760px;
-    height: 680px;
+    height: 100%
 }   /*QuestionScreen - Header*/
+    .quizzPageHeader{
+        width: 100%;
+    }
     .quizzQuestionTitle{
         width: 100%;
         height: 138px;
@@ -180,18 +186,27 @@ main h1{
     }   .quizzAlternative{
             margin-top: 25px;
             width: 330px;
-            height: 210px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-        }   .quizzAlternative img{
+        }   .quizzAlternative .answerImg{
                 width: 330px;
                 height: 172px;
+                background-position: center; 
+                background-repeat: no-repeat; 
+                background-size: cover;
             } .quizzAlternative h2{
+                margin-top: 10px;
                 font-weight: 700;
                 font-size: 20px;
                 line-height: 23px;
-                color: #000000;
+            }
+            .rightAnswer{
+                color: #009C22;
+            } .wrongAnswer{
+                color: #FF4B4B;
+            }  
+            .opacity{
+                opacity: 0.3;
             }
 /*Main > Quizz-Page > ResultScreen (Tela-2)*/
 .quizzResult{

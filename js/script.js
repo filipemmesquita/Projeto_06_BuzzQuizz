@@ -296,8 +296,6 @@ function levelValidation(){
 function catchError(error){
     alert("Ocorreu um erro! codigo "+error.response.status)
 }
-
-
 function requestRenderQuizzes(){
     promisse = axios.get("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes")
     promisse.then(renderQuizzes)
@@ -348,39 +346,52 @@ function startQuizz(element){
     quizzToPlayPromisse.then(QuizzInfos)
     quizzToPlayPromisse.catch()
 }
+let data;
 function QuizzInfos(quizz){
     const quizzPage = document.querySelector(`.quizzPage`) //Se tiver Vazio, faz somente 1 vez o quizz, caso não esteja consigo acessar as infos do then, sem precissar puxar dnv!
-    do{
+    while(quizzPage.innerHTML === '\n    '){
+        console.log(`Minha Primeira vez criando o Quizz`)
         createQuizz(quizz)
-    } while(quizzPage.innerHTML === "")
-    return quizz // Informaçoes do Then
+        data = quizz
+        return false
+    } 
+    console.log(`Estou somente pegando as informaçoes`)
+    return data
 }
+let arrayEmbaralhada = []
 function createQuizz(quizz){
     const quizzInfos = quizz.data
     const quizzPage = document.querySelector(`.quizzPage`);//fazer as alteraçoes da tela 2
     quizzPage.setAttribute("id", quizzInfos.id) // Dizer qual é o jogo
-    quizzPage += sectionQuizzHeader(quizzInfos) //Cria o Header
-    for(let i = 0; i < quizz.questions.length; i++){
+    //Funcionando até
+    quizzPage.innerHTML += sectionQuizzHeader(quizzInfos) //Cria o Header
+    for(let i = 0; i < quizzInfos.questions.length; i++){
         quizzPage.innerHTML += sectionQuizzQuestion() //Cria a Section da Questão
         const section = document.querySelectorAll(`.quizzQuestion`)[i] //Pega a Questão
-        section.innerHTML = sectionQuizzQuestionContent(quizz.question[i]) //Criar o conteudo de cada Questão.
+        section.innerHTML = sectionQuizzQuestionContent(quizzInfos.questions[i]) //Criar o conteudo de cada Questão.
         const alternatives = document.querySelectorAll(`.allAlternatives`)[i]//Pegar todas as alternativas
         const answers = []
-        for(let j = 0; j < quizz.question[i].answers.length;j++){ //Pegar quantidade de perguntas, e poder embaralhar seus objetos(img e texto não!)
-            answers.push(quizz.question[i].answers[j])
+        for(let j = 0; j < quizzInfos.questions[i].answers.length;j++){ //Pegar quantidade de perguntas, e poder embaralhar seus objetos(img e texto não!)
+            answers.push(quizzInfos.questions[i].answers[j])
         }
         answers.sort(comparador)
+        arrayEmbaralhada.push(answers)
         for(let x = 0; x < answers.length; x++){
             alternatives.innerHTML += liQuizzQuestionAlternatives(answers[x]);
         }
     }
+    main(0)
+    main(1)
+    quizzPage.scrollIntoView(true)
+    console.log(arrayEmbaralhada)
 }
+
 function comparador() { 
 	return Math.random() - 0.5; 
 }
 function sectionQuizzHeader(quizz){ //Feito
     return `
-    <section class="quizzPageHeader" style="background-imagem: url('${quizz.image}')">
+    <section class="quizzPageHeader" style="background-image: url(${quizz.image});">
         <h1>${quizz.title}</h1>
     </section>
     `
@@ -393,66 +404,49 @@ function sectionQuizzQuestion(){//Cria as Questions
 }
 function sectionQuizzQuestionContent(question){ //Cria o Content de cada Questão
     return `
-    <div class="quizzQuestionTitle" style="background-color="${question.color}"">
+    <div class="quizzQuestionTitle" style="background-color: ${question.color};">
         <h1 class="quizzTopTitle">${question.title}</h1>
     </div>
     <ul class="allAlternatives">
     </ul>
     `
 }
-function liQuizzQuestionAlternatives(){//Cria cada 
+function liQuizzQuestionAlternatives(answers){//Cria cada 
     return `
     <li class="quizzAlternative" onclick="isRight(this)">
-        <img src="${answers.imagem}" alt="">
+        <div class="answerImg" style="background-image: url(${answers.image});"></div>
         <h2>${answers.text}</h2>
     </li>
     `
 }
+//Erros dessa parte que precisam ser corrigidos!!!!!!!!
+//1 - Para saber se a resposta é correta ele precisa verificar a array embaralhada!
+//2 - Para saber se a reposta é correta ele tem que de alguma forma verificar a array de acordo com o número da questo que ele clicou
 function isRight(element){
-    const infos = QuizzInfos().data //Armazenando Array + .data para não usar toda vez
     const alternatives = element.parentNode.querySelectorAll(`.quizzAlternative`)//Selecionar todas as alternativas da Questão
-    //Se colocar o click no img, tem que colocar double parentNode
-    const alternativesText = alternatives.querySelector(`h2`)//Pegar seu texto para mudar cor
+    questionClick(element)
     for(let i = 0; i < alternatives.length; i++){
         alternatives[i].removeAttribute(`onclick`)//Não poder interagir novamente
         if(alternatives[i] !== element){//Se for diferente do interagido, ganha opacity
-            alternatives[i].classList.add(`.opacity`) 
+            alternatives[i].classList.add(`opacity`) 
         }
-        for(let j = 0; j < alternatives.length; j++){//Saber se as repostas
-            const alternativesText = alternatives[j].querySelector(`h2`)//Pega o texto especifico
-            const isRight = infos.questions.answers[j].isCorrectAnswer //Acessando se é true ou false
-            if(isRight){//Se for true recebe a cor, caso contrario recebe a cor vermelha
-                alternativesText.classList.add(`rightAnswer`)
-            } else {
-                alternativesText.classList.add(`wrongAnswer`)
-            }
+        const alternativesText = alternatives[i].querySelector(`h2`)//Pega o texto especifico
+        const isAnswerRight = arrayEmbaralhada[questionClick(element)]
+        if(isAnswerRight[i].isCorrectAnswer){//Se for true recebe a cor, caso contrario recebe a cor vermelha
+            alternativesText.classList.add(`rightAnswer`)
+        } else {
+            alternativesText.classList.add(`wrongAnswer`)
         }
-    }//Teoricamente seria a função do game, porém como o resultado varia de acordo com % de acertos, a section Resultado só pode ser criada quando o Quizz é totalmente respondido!!!!
-    //Possivelmente da para fazer isso como uma função separada!!
-    const amountOfQuestions = infos.questions.answers //Saber quantas questões tem
-    const allRightAnswers = document.querySelectorAll(`.quizzAlternative h2`).classList.contains(`rightAnswer`) //Saber se todas as questões foram respondias, pois apenas 1 alternativa está certa por SectionQuestion, logo da para usar como comparação! Obs: da tbm para usar o atributo como comparação tbm, pois o mesmo fica zerado quando todas respostas foram respondidas!
-    
-    if(amountOfQuestions.length === allRightAnswers.length){//Para saber se o jogo acabou
-        let rightAnswerByUser = 0 //Quantidade de Acertos!
-        for(let x = 0; x < allRightAnswers.length; x++){//Para saber se o usuario acertou ou não
-            if(allRightAnswers[x].parentNode.classList.contains(`opacity`)){//quer dizer que errou a questão, pois se ele acerta a reposta não ganha opacidade!
-            } else {//Se não tiver opacity, aumenta a quantidade de acertos!
-                rightAnswerByUser++
-            }
+        console.log(isAnswerRight[i].isCorrectAnswer)
+    }
+}
+function questionClick(element){
+    const questionClicked = element.parentNode.parentNode;
+    const allQuestion = document.querySelectorAll(`.quizzQuestion`)
+    for(let i = 0; i < allQuestion.length; i++){
+        if(allQuestion[i] === questionClicked){
+            return i
         }
-        //Porcentagem de Acerto!
-        const percentageByUser = (rightAnswerByUser / allRightAnswers.length) * 100
-        const AllLevels = infos.levels
-        let zIndice = 0
-        for(let z = 0; z < AllLevels.length; z++){//Saber quantos niveis tem/saber qual o usuario se encaixa
-            if(AllLevels[z].minValue <= percentageByUser){
-                zIndice = z //Armazena em qual level o jogador ficou!
-            }
-        }
-        sectionQuizzResult() //Falta colocar os onclick!!!
-        const resultContent = document.querySelector(`.quizzResult .quizzBox`);
-        resultContent.innerHTML += quizzResultContent(AllLevels[zIndice], percentageByUser);
-
     }
 }
 function sectionQuizzResult(){
