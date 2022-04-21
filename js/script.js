@@ -2,7 +2,7 @@ const globalCreatedQuizz ={
     title: "",
     image: "",
     questions: [],
-    levels:[]
+    levels: []
 }
 let main = (page) => document.querySelectorAll(`main`)[page].classList.toggle(`active`)
 function quizzCreator(){
@@ -283,12 +283,12 @@ function levelValidation(){
         }if(levelDescription.length < 30){
             return false
         }
-        globalCreatedQuizz.levels.push({
+        globalCreatedQuizz.levels.push={
             title: levelTitle,
             image:  levelURL,
             text:   levelDescription,
             minValue: levelPercentage,
-        })
+        }
     }
     return true
 }
