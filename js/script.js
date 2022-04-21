@@ -307,14 +307,17 @@ function renderQuizzes(allQuizzes){
     const otherQuizzesRenders=document.querySelector(".otherQuizzes")
     const userQuizzesRenders=document.querySelector(".userAllQuizzes")
     console.log(allQuizzes)
-    const userId=4;
+    //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
+    const userIds=4;
     const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
-        return userId===currentQuizz.id;
+        return userIds===currentQuizz.id;
     })
+    //checa se há há algum quizz do usuario
     if(allUserQuizzes.length>0){
         document.querySelector(".userEmptyQuizzes").classList.remove("active")
         userQuizzesRenders.classList.add("active")
     }
+    //renderiza os quizzes do usuario
     userQuizzesRenders.innerHTML=""
     for(x=0;x<allUserQuizzes.length;x++){
     userQuizzesRenders.innerHTML+=`
@@ -324,8 +327,9 @@ function renderQuizzes(allQuizzes){
         </div>
     </li>`
     }
+    //renderiza os quizzes de todo mundo
     const allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
-        return userId!==currentQuizz.id;
+        return userIds!==currentQuizz.id;
     })
     console.log(allOtherQuizzes)
     otherQuizzesRenders.innerHTML="";
