@@ -207,23 +207,20 @@ function questionsValidation(){
             console.log("0 respostas erradas em y"+y)
             return false
         }
-        globalCreatedQuizz.questions[y].push(
-            {
+        globalCreatedQuizz.questions[y]={
                 title:questionTitle.querySelectorAll(".inputInfos")[0].value,
                 color:questionTitle.querySelectorAll(".inputInfos")[1].value,
                 answers:[]
-            })
-        globalCreatedQuizz.questions[y].answers.push(
-            {
+            }
+        globalCreatedQuizz.questions[y].answers[0]={
                 text: allQuestionInput[1].querySelectorAll(".inputInfos")[0].value,
                 image: allQuestionInput[1].querySelectorAll(".inputInfos")[1].value,
                 isCorrectAnswer:true
-            })
-        for(let x=2;x<wrongAnswerAmount;x++){
-            globalCreatedQuizz.questions.answers.push(
-                {
-                    text: allQuestionInput[x].querySelectorAll(".inputInfos")[0].value,
-                    image: allQuestionInput[x].querySelectorAll(".inputInfos")[1].value,
+            }
+        for(let x=2;x<wrongAnswerAmount+2;x++){
+            globalCreatedQuizz.questions[y].answers.push({
+                    text: allQuestionInput[(x)].querySelectorAll(".inputInfos")[0].value,
+                    image: allQuestionInput[(x)].querySelectorAll(".inputInfos")[1].value,
                     isCorrectAnswer:false
                 })
             
