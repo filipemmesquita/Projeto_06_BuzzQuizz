@@ -49,7 +49,12 @@ function quizzCreatorProceed(element){
             promisse.then(function(){
             infosText.innerHTML = "Seu quizz está pronto!"
             quizzCreatorChangePages(2)
-            quizzCreatorChangePages(3)})
+            quizzCreatorChangePages(3)
+            globalCreatedQuizz.title=""
+            globalCreatedQuizz.image=""
+            globalCreatedQuizz.questions.length=0
+            globalCreatedQuizz.levels.length=0
+            })
             promisse.catch(catchError)
 
         } else {
