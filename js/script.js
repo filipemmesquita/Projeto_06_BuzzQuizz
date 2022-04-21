@@ -1,7 +1,7 @@
 const globalCreatedQuizz ={
     title: "",
     image: "",
-    questions: [{}]
+    questions: []
 }
 let main = (page) => document.querySelectorAll(`main`)[page].classList.toggle(`active`)
 function quizzCreator(){
@@ -165,6 +165,7 @@ function isHexColor(str){
 function questionsValidation(){
     console.log("questions validation ativado")
     const allQuestion= document.querySelectorAll(".question");
+
     for(let y=0;y<allQuestion.length;y++){
         const allQuestionInput = allQuestion[y].querySelectorAll(`.quizzCreationInputBox`)
         const questionTitle = allQuestionInput[0]
@@ -199,28 +200,26 @@ function questionsValidation(){
             console.log("0 respostas erradas em y"+y)
             return false
         }
-        globalCreatedQuizz.questions=[
+        globalCreatedQuizz.questions[y].push(
             {
                 title:questionTitle.querySelectorAll(".inputInfos")[0].value,
                 color:questionTitle.querySelectorAll(".inputInfos")[1].value,
-                answers:[{}]
-            }
-        ]
-        globalCreatedQuizz.questions.answers=[
+                answers:[]
+            })
+        globalCreatedQuizz.questions[y].answers.push(
             {
                 text: allQuestionInput[1].querySelectorAll(".inputInfos")[0].value,
                 image: allQuestionInput[1].querySelectorAll(".inputInfos")[1].value,
                 isCorrectAnswer:true
-            }
-        ]
+            })
         for(let x=2;x<wrongAnswerAmount;x++){
-            globalCreatedQuizz.questions.answers=[
+            globalCreatedQuizz.questions.answers.push(
                 {
                     text: allQuestionInput[x].querySelectorAll(".inputInfos")[0].value,
                     image: allQuestionInput[x].querySelectorAll(".inputInfos")[1].value,
                     isCorrectAnswer:false
-                }
-            ]
+                })
+            
         }  
     }
     console.log(globalCreatedQuizz)
