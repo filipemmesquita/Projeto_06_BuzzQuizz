@@ -212,7 +212,7 @@ function questionsValidation(){
         for(let x=1;x<allQuestionInput.length;x++){
             const currentQuestionChecked = allQuestionInput[x].querySelectorAll(".inputInfos")
             if(currentQuestionChecked[0].value!=="" ){
-                if(currentQuestionChecked[0].value.length<20){
+                if(currentQuestionChecked[0].value.length<0){
                     console.log("texto da pergunta "+x + " muito curto em y"+y)
                     return false
                 }
@@ -358,52 +358,52 @@ function renderQuizzes(allQuizzes){
 </li>`
     }
 }
+startQuizz()
+//Funções da main > QuizzPage (Tela-2)
 function startQuizz(element){
     const quizzId = element.id //Scopar o ID do Elemento
-    const quizzToPlayPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${quizzId}`) //Tem que mudar o Id do final para saber qual é o quizz.
+    const quizzToPlayPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/2`) //Tem que mudar o Id do final para saber qual é o quizz.
     quizzToPlayPromisse.then(QuizzInfos)
     quizzToPlayPromisse.catch()
 }
-let data;
+let thenQuizz;
+const quizzPage = () => document.querySelector(`.quizzPage`)
 function QuizzInfos(quizz){
-    const quizzPage = document.querySelector(`.quizzPage`) //Se tiver Vazio, faz somente 1 vez o quizz, caso não esteja consigo acessar as infos do then, sem precissar puxar dnv!
-    while(quizzPage.innerHTML === '\n    '){
+    while(quizzPage().innerHTML === '\n    '){
         console.log(`Minha Primeira vez criando o Quizz`)
         createQuizz(quizz)
-        data = quizz
+        thenQuizz = quizz
         return false
     } 
-    console.log(`Estou somente pegando as informaçoes`)
-    return data
-}
-let arrayEmbaralhada = []
-function createQuizz(quizz){
-    const quizzInfos = quizz.data
-    const quizzPage = document.querySelector(`.quizzPage`);//fazer as alteraçoes da tela 2
-    quizzPage.setAttribute("id", quizzInfos.id) // Dizer qual é o jogo
-    //Funcionando até
-    quizzPage.innerHTML += sectionQuizzHeader(quizzInfos) //Cria o Header
-    for(let i = 0; i < quizzInfos.questions.length; i++){
-        quizzPage.innerHTML += sectionQuizzQuestion() //Cria a Section da Questão
-        const section = document.querySelectorAll(`.quizzQuestion`)[i] //Pega a Questão
-        section.innerHTML = sectionQuizzQuestionContent(quizzInfos.questions[i]) //Criar o conteudo de cada Questão.
-        const alternatives = document.querySelectorAll(`.allAlternatives`)[i]//Pegar todas as alternativas
-        const answers = []
-        for(let j = 0; j < quizzInfos.questions[i].answers.length;j++){ //Pegar quantidade de perguntas, e poder embaralhar seus objetos(img e texto não!)
-            answers.push(quizzInfos.questions[i].answers[j])
-        }
-        answers.sort(comparador)
-        arrayEmbaralhada.push(answers)
-        for(let x = 0; x < answers.length; x++){
-            alternatives.innerHTML += liQuizzQuestionAlternatives(answers[x]);
-        }
-    }
-    main(0)
-    main(1)
-    quizzPage.scrollIntoView(true)
-    console.log(arrayEmbaralhada)
+    return thenQuizz.data
 }
 
+function createQuizz(quizz){
+    while(quizzPage().innerHTML === '\n    '){
+        let scrambledAnswers = []
+        quizzPage().setAttribute("id", quizz.id) // Dizer qual é o jogo
+        quizzPage().innerHTML += sectionQuizzHeader(quizz) //Cria o Header
+        for(let i = 0; i < quizz.questions.length; i++){
+            quizzPage().innerHTML += sectionQuizzQuestion(quizz.questions[i]) //Cria a Section da Questão
+            const section = document.querySelectorAll(`.quizzQuestion`)[i] //Pega a Questão
+            const alternatives = section.querySelectorAll(`.allAlternatives`)[i]//Pegar todas as alternativas
+            const answers = [] //Array para armazenar e depois embaralhar o conteúdo das questões
+            for(let j = 0; j < quizz.questions[i].answers.length;j++){ //Pegar quantidade de perguntas, e poder embaralhar seus objetos
+                answers.push(quizz.questions[i].answers[j])
+            }
+            answers.sort(comparador)
+            scrambledAnswers.push(answers)
+            for(let x = 0; x < answers.length; x++){
+                alternatives.innerHTML += liQuizzQuestionAlternatives(answers[x]);
+            }
+        }
+        main(0)
+        main(1)
+        quizzPage.scrollIntoView(true)
+    }
+    console.log(scrambledAnswers)
+    return scrambledAnswers
+}
 function comparador() { 
 	return Math.random() - 0.5; 
 }
@@ -414,21 +414,17 @@ function sectionQuizzHeader(quizz){ //Feito
     </section>
     `
 }
-function sectionQuizzQuestion(){//Cria as Questions
+function sectionQuizzQuestion(question){//Cria as Questions
     return`
     <section class="quizzQuestion quizzBox">
+        <div class="quizzQuestionTitle" style="background-color: ${question.color};">
+            <h1 class="quizzTopTitle">${question.title}</h1>
+        </div>
+        <ul class="allAlternatives">
+        </ul>
     </section>
     `
-}
-function sectionQuizzQuestionContent(question){ //Cria o Content de cada Questão
-    return `
-    <div class="quizzQuestionTitle" style="background-color: ${question.color};">
-        <h1 class="quizzTopTitle">${question.title}</h1>
-    </div>
-    <ul class="allAlternatives">
-    </ul>
-    `
-}
+}-
 function liQuizzQuestionAlternatives(answers){//Cria cada 
     return `
     <li class="quizzAlternative" onclick="isRight(this)">
@@ -490,12 +486,8 @@ function isRight(element){
         const resultContent = document.querySelector(`.quizzResult .quizzBox`);
         resultContent.innerHTML = quizzResultContent(AllLevels[zIndice], percentageByUser);
         document.querySelector(`.quizzResult`).classList.add(`active`)
-        
-
     }
 }
-
-
 function questionClick(element){
     const questionClicked = element.parentNode.parentNode;
     const allQuestion = document.querySelectorAll(`.quizzQuestion`)
