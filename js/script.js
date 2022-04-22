@@ -4,10 +4,10 @@ const globalCreatedQuizz ={
     questions: [],
     levels: []
 }
-let main = (page) => document.querySelectorAll(`main`)[page].classList.toggle(`active`)
+let main = (page) => document.querySelectorAll(`main`)[page]
 function quizzCreator(){
-    main(0) 
-    main(2)
+    main(0).classList.toggle(`active`)
+    main(2).classList.toggle(`active`)
 }
 function homeButton(element){
     window.location.reload()
@@ -370,8 +370,7 @@ function renderQuizzes(allQuizzes){
     }
 }
 function startQuizz(id){
-    const quizzId = id //Scopar o ID do Elemento
-    const quizzToPlayPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${quizzId}`) //Tem que mudar o Id do final para saber qual é o quizz.
+    const quizzToPlayPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`) //Tem que mudar o Id do final para saber qual é o quizz.
     quizzToPlayPromisse.then(QuizzInfos)
     quizzToPlayPromisse.catch()
 }
@@ -407,9 +406,9 @@ function createQuizz(quizz){
             alternatives.innerHTML += liQuizzQuestionAlternatives(answers[x]);
         }
     }
-    main(0)
-    main(1)
-    document.querySelector(`header`).scrollIntoView(true)
+    main(0).classList.remove(`active`)
+    main(1).classList.add(`active`)
+    document.querySelector(`html`).scrollIntoView(true)
 }
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -468,6 +467,7 @@ function answeringQuestion(element){
     if(isQuizzFinished()){
         const object = isQuizzFinished()
         createQuizzResult(object.level, object.percentageByUser)
+        setTimeout(function(){document.querySelector(`.quizzResult`).scrollIntoView({behavior: "smooth"})}, 2000)
     }
 }
 function questionClick(element){
@@ -535,7 +535,7 @@ function sectionQuizzResult(){
     <section class="quizzResult">
             <div class="quizzBox">
             </div>
-            <button class="restartQuizz btn">Reiniciar Quizz</button>
+            <button class="restartQuizz btn" onclick="restartQuizz()">Reiniciar Quizz</button>
             <button class="homeButton" onclick="homeButton()">Voltar Home</button>
     </section>
     `
@@ -550,4 +550,10 @@ function quizzResultContent(level, percentageByUser){
         <h2>${level.text}</h2>
     </div>
     `
+}
+function restartQuizz(){
+    const id = quizzPage().getAttributeNode("id").value
+    quizzPage().innerHTML = '\n    '
+    console.log(id)
+    startQuizz(id)
 }

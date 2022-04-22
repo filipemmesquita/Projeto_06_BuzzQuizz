@@ -130,7 +130,6 @@ main h1{
     .userAllQuizzes{
         display: none;
         flex-direction: column;
-        align-items: center;
         width:100%;
     }   .navContainer{
             width: 100%;
@@ -146,6 +145,10 @@ main h1{
         .mainpage ul{
             display: flex;
             flex-direction: column;
+        }
+        .mainpage ul div{
+            display: flex;
+            align-items: center;
         }
 /*Main > Quizz-Page > QuestionScreen (Tela-2)*/
 .quizzBox{
