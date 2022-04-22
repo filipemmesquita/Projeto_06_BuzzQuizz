@@ -148,9 +148,6 @@ main h1{
             flex-direction: column;
         }
 /*Main > Quizz-Page > QuestionScreen (Tela-2)*/
-.quizzPage{
-    scroll-margin-top: 100px;
-}
 .quizzBox{
     margin-top: 40px;
     padding: 37.5px;
@@ -158,10 +155,29 @@ main h1{
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     width: 760px;
     height: 100%;
-    scroll-margin-top: 100px;
 }   /*QuestionScreen - Header*/
     .quizzPageHeader{
+        position: relative;
         width: 100%;
+        height: 227px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        word-wrap: break-word;
+    }   .quizzPageHeader h1{
+            width: 90%;
+            position: absolute;
+            font-weight: 400;
+            font-size: 39px;
+            line-height: 46px;
+            color: #FFFFFF;
+            text-align: center;
+        }
+    .quizzQuestion{
+        scroll-margin: 94px;
     }
     .quizzQuestionTitle{
         width: 100%;
@@ -172,6 +188,7 @@ main h1{
         justify-content: center;
         text-align: center;
     } .quizzTopTitle{
+            word-wrap: break-word;
             width: 100%;
             font-weight: 700;
             font-size: 23px;
@@ -200,6 +217,7 @@ main h1{
                 font-weight: 700;
                 font-size: 20px;
                 line-height: 23px;
+                word-wrap: break-word;
             }
             .rightAnswer{
                 color: #009C22;
@@ -246,22 +264,18 @@ main h1{
                 font-size: 19px;
                 line-height: 25px;
                 color: #484848;
+                word-wrap: break-word;
             }
 /*Layout dos Quizz*/
 .quizz{ /*li -> quizz*/
     margin-top: 14px; /*Para mobile*/
     position: relative;
-    display: flex;
-    align-items: center;
     justify-content: center;
     background-size:cover;
-
-
 }
     .quizz div{/*Source*/
         width: 340px;
-        height: 181px;  
-
+        height: 181px; 
         background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%);
         border-radius: 5px;
     }
@@ -392,14 +406,6 @@ main h1{
     align-items: center;
     flex-direction: column;
 }
-    .quizzCreationFinish div{
-        background-image: url("../imagens/Rectangle 34 (1).png");
-        height: 181px;
-        width: 340px;
-        background-position: center; 
-        background-repeat: no-repeat; 
-        background-size: cover;
-    }
 .active{ /*Para testes!*/
     display: flex;
 }

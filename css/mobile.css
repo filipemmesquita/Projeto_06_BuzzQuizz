@@ -5,6 +5,12 @@
     height:44px;
 }
 /*Main Quizz-Page (Tela-2)*/
+.quizzPageHeader{
+    height: 142px;
+}   .quizzPageHeader h1{
+        font-size: 19px;
+        line-height: 22px;
+    }
 .quizzBox{
     margin-top: 25px;
     padding: 18px;
