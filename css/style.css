@@ -390,14 +390,6 @@ main h1{
     align-items: center;
     flex-direction: column;
 }
-    .quizzCreationFinish div{
-        background-image: url("../imagens/Rectangle 34 (1).png");
-        height: 181px;
-        width: 340px;
-        background-position: center; 
-        background-repeat: no-repeat; 
-        background-size: cover;
-    }
 .active{ /*Para testes!*/
     display: flex;
 }

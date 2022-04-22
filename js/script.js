@@ -53,6 +53,7 @@ function quizzCreatorProceed(element){
                 infosText.innerHTML = "Seu quizz está pronto!"
                 quizzCreatorChangePages(2)
                 quizzCreatorChangePages(3)
+                renderQuizzCreationFinish(postResponse.data.id)
                 globalCreatedQuizz.title=""
                 globalCreatedQuizz.image=""
                 globalCreatedQuizz.questions.length=0
@@ -74,6 +75,17 @@ function updateLocalQuizzes(quizzId){
     localStorage.setItem("localQuizzList", JSON.stringify(localQuizzListUpdate));
     console.log(localQuizzListUpdate)
     console.log(localStorage.getItem("localQuizzList"))
+}
+function renderQuizzCreationFinish(quizzId){
+    document.querySelector(".quizzCreationFinish").innerHTML=`
+        <li class="quizz"  style="background-image: url('${globalCreatedQuizz.image}');"> 
+            <div>
+            <h2>${globalCreatedQuizz.title}</h2>
+            </div>
+        </li>
+
+        <button class="quizzAccess btn" onclick="startQuizz(${quizzId})">Acessar Quizz</button>
+        <button class="homeButton" onclick="homeButton(this)">Voltar para home</button>`
 }
 function infosValidation(){
     const allInfoInputs = document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
@@ -98,8 +110,10 @@ function infosValidation(){
     }
 }
 function questionsGenerator(infos){
+    
    const questionNumbers = infos.questionamount
    let CreateQuestionsPage = document.querySelector(`.quizzCreationQuestions`)
+   CreateQuestionsPage.innerHTML="";
    for(let i = 1; i < questionNumbers + 1; i++){
         CreateQuestionsPage.innerHTML += questionSection(i)
    }
@@ -256,6 +270,7 @@ function questionsValidation(){
 function levelsGenerator(infos){
     const levelNumbers = infos.levelamount
     let CreateLevelPage = document.querySelector(`.quizzCreationLevels`)
+    CreateLevelPage.innerHTML=""
     for(let i = 1; i < levelNumbers + 1; i++){
         CreateLevelPage.innerHTML += levelSection(i)
     }
@@ -320,29 +335,33 @@ function renderQuizzes(allQuizzes){
     //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
     const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
     
-    const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
-        for(let x=0;x<userIds.length;x++){
-            if(currentQuizz.id===userIds[x]){
-                return true        
+    if(userIds){
+        const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
+            for(let x=0;x<userIds.length;x++){
+                if(currentQuizz.id===userIds[x]){
+                    return true        
+                }
             }
+            return false;
+        })
+        
+        //checa se há há algum quizz do usuario
+        if(allUserQuizzes.length>0){
+            document.querySelector(".userEmptyQuizzes").classList.remove("active")
+            document.querySelector(".userAllQuizzes").classList.add("active")
         }
-        return false;
-    })
-    //checa se há há algum quizz do usuario
-    if(allUserQuizzes.length>0){
-        document.querySelector(".userEmptyQuizzes").classList.remove("active")
-        document.querySelector(".userAllQuizzes").classList.add("active")
+         //renderiza os quizzes do usuario
+        userQuizzesRenders.innerHTML=""
+        for(x=0;x<allUserQuizzes.length;x++){
+        userQuizzesRenders.innerHTML+=`
+        <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
+            <div onclick="startQuizz(${allUserQuizzes[x].id})">
+            <h2>${allUserQuizzes[x].title}</h2>
+            </div>
+        </li>`
+        }
     }
-    //renderiza os quizzes do usuario
-    userQuizzesRenders.innerHTML=""
-    for(x=0;x<allUserQuizzes.length;x++){
-    userQuizzesRenders.innerHTML+=`
-    <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
-        <div id="${allUserQuizzes[x].id}" onclick="quizzProceed(this)">
-        <h2>${allUserQuizzes[x].title}</h2>
-        </div>
-    </li>`
-    }
+   
     //renderiza os quizzes de todo mundo
     const allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
         return userIds!==currentQuizz.id;
@@ -352,14 +371,14 @@ function renderQuizzes(allQuizzes){
     for(x=0;x<allOtherQuizzes.length;x++){
     otherQuizzesRenders.innerHTML+=`
 <li class="quizz"  style="background-image: url('${allOtherQuizzes[x].image}');"> 
-    <div id="${allOtherQuizzes[x].id}" onclick="startQuizz(this)">
+    <div onclick="startQuizz(${allOtherQuizzes[x].id})">
     <h2>${allOtherQuizzes[x].title}</h2>
     </div>
 </li>`
     }
 }
-function startQuizz(element){
-    const quizzId = element.id //Scopar o ID do Elemento
+function startQuizz(id){
+    const quizzId = id //Scopar o ID do Elemento
     const quizzToPlayPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${quizzId}`) //Tem que mudar o Id do final para saber qual é o quizz.
     quizzToPlayPromisse.then(QuizzInfos)
     quizzToPlayPromisse.catch()
