@@ -46,15 +46,17 @@ function quizzCreatorProceed(element){
         }
     }if(el === "proceedToFinish"){
         if(levelValidation()){
+            console.log(globalCreatedQuizz)
             const promisse = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes",globalCreatedQuizz)
-            promisse.then(function(){
-            infosText.innerHTML = "Seu quizz está pronto!"
-            quizzCreatorChangePages(2)
-            quizzCreatorChangePages(3)
-            globalCreatedQuizz.title=""
-            globalCreatedQuizz.image=""
-            globalCreatedQuizz.questions.length=0
-            globalCreatedQuizz.levels.length=0
+            promisse.then(function(postResponse){
+                updateLocalQuizzes(postResponse.data.id)
+                infosText.innerHTML = "Seu quizz está pronto!"
+                quizzCreatorChangePages(2)
+                quizzCreatorChangePages(3)
+                globalCreatedQuizz.title=""
+                globalCreatedQuizz.image=""
+                globalCreatedQuizz.questions.length=0
+                globalCreatedQuizz.levels.length=0
             })
             promisse.catch(catchError)
 
@@ -62,6 +64,16 @@ function quizzCreatorProceed(element){
             alert(`Usuário, digite os dados corretamente`)
         }
     }
+}
+function updateLocalQuizzes(quizzId){
+    let localQuizzListUpdate =[];
+    if(localStorage.getItem("localQuizzList")){
+        localQuizzListUpdate=JSON.parse(localStorage.getItem("localQuizzList"))
+    }
+    localQuizzListUpdate.push(quizzId);
+    localStorage.setItem("localQuizzList", JSON.stringify(localQuizzListUpdate));
+    console.log(localQuizzListUpdate)
+    console.log(localStorage.getItem("localQuizzList"))
 }
 function infosValidation(){
     const allInfoInputs = document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
@@ -284,12 +296,12 @@ function levelValidation(){
         }if(levelDescription.length < 30){
             return false
         }
-        globalCreatedQuizz.levels.push={
+        globalCreatedQuizz.levels.push({
             title: levelTitle,
             image:  levelURL,
             text:   levelDescription,
             minValue: levelPercentage,
-        }
+        })
     }
     return true
 }
@@ -306,9 +318,15 @@ function renderQuizzes(allQuizzes){
     const userQuizzesRenders=document.querySelector(".quizzByUser")
     console.log(allQuizzes)
     //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
-    const userIds=1;
+    const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
+    
     const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
-        return userIds===currentQuizz.id;
+        for(let x=0;x<userIds.length;x++){
+            if(currentQuizz.id===userIds[x]){
+                return true        
+            }
+        }
+        return false;
     })
     //checa se há há algum quizz do usuario
     if(allUserQuizzes.length>0){
