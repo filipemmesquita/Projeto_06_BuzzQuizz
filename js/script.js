@@ -41,6 +41,7 @@ function quizzCreatorProceed(element){
             console.log(globalCreatedQuizz)
             const promisse = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes",globalCreatedQuizz)
             promisse.then(function(postResponse){
+                console.log(postResponse)
                 updateLocalQuizzes(postResponse.data.id)
                 infosText.innerHTML = "Seu quizz está pronto!"
                 quizzCreatorChangePages(2)
@@ -349,11 +350,17 @@ function renderQuizzes(allQuizzes){
         <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
             <div onclick="startQuizz(${allUserQuizzes[x].id})">
             <h2>${allUserQuizzes[x].title}</h2>
+                <div class="sideButtons">
+                    <div onclick="editQuizz()"><ion-icon name="create-outline"></ion-icon></div>
+                    <div onclick="deleteQuizz()"><ion-icon name="trash-outline"></ion-icon></div>
+                </div>
             </div>
         </li>`
         }
+        
     }
-   
+    //interrompe o bubbling nos sideButtons
+    document.querySelectorAll(".sideButtons").forEach((element)=> element.addEventListener("click", stopEvent, false))
     //renderiza os quizzes de todo mundo
     const allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
         return userIds!==currentQuizz.id;
@@ -556,4 +563,15 @@ function restartQuizz(){
     quizzPage().innerHTML = '\n    '
     console.log(id)
     startQuizz(id)
+}
+function editQuizz(event){
+    console.log("isso vai para a tela de editar quizz")
+    
+}
+function deleteQuizz(event){
+    console.log("isso vai para a tela de deletar quizz")
+    
+}
+function stopEvent(event) {
+    event.stopPropagation();
 }
