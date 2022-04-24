@@ -42,7 +42,7 @@ function quizzCreatorProceed(element){
             const promisse = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes",globalCreatedQuizz)
             promisse.then(function(postResponse){
                 console.log(postResponse)
-                updateLocalQuizzes(postResponse.data.id)
+                updateLocalQuizzes(postResponse.data.id, postResponse.data.key)
                 infosText.innerHTML = "Seu quizz está pronto!"
                 quizzCreatorChangePages(2)
                 quizzCreatorChangePages(3)
@@ -59,7 +59,7 @@ function quizzCreatorProceed(element){
         }
     }
 }
-function updateLocalQuizzes(quizzId){
+function updateLocalQuizzes(quizzId,quizzKey){
     let localQuizzListUpdate =[];
     if(localStorage.getItem("localQuizzList")){
         localQuizzListUpdate=JSON.parse(localStorage.getItem("localQuizzList"))
@@ -68,6 +68,14 @@ function updateLocalQuizzes(quizzId){
     localStorage.setItem("localQuizzList", JSON.stringify(localQuizzListUpdate));
     console.log(localQuizzListUpdate)
     console.log(localStorage.getItem("localQuizzList"))
+    let localQuizzListKeyUpdate =[];
+    if(localStorage.getItem("localQuizzkeyList")){
+        localQuizzListKeyUpdate=JSON.parse(localStorage.getItem("localQuizzkeyList"))
+    }
+    localQuizzListKeyUpdate.push(quizzKey);
+    localStorage.setItem("localQuizzkeyList", JSON.stringify(localQuizzListKeyUpdate));
+    console.log(localQuizzListKeyUpdate)
+    console.log(localStorage.getItem("localQuizzkeyList"))
 }
 function renderQuizzCreationFinish(quizzId){
     document.querySelector(".quizzCreationFinish").innerHTML=`
@@ -351,8 +359,8 @@ function renderQuizzes(allQuizzes){
             <div onclick="startQuizz(${allUserQuizzes[x].id})">
             <h2>${allUserQuizzes[x].title}</h2>
                 <div class="sideButtons">
-                    <div onclick="editQuizz()"><ion-icon name="create-outline"></ion-icon></div>
-                    <div onclick="deleteQuizz()"><ion-icon name="trash-outline"></ion-icon></div>
+                    <div onclick="editQuizz(${allUserQuizzes[x].id})"><ion-icon name="create-outline"></ion-icon></div>
+                    <div onclick="deleteQuizz(${allUserQuizzes[x].id})"><ion-icon name="trash-outline"></ion-icon></div>
                 </div>
             </div>
         </li>`
@@ -363,7 +371,12 @@ function renderQuizzes(allQuizzes){
     document.querySelectorAll(".sideButtons").forEach((element)=> element.addEventListener("click", stopEvent, false))
     //renderiza os quizzes de todo mundo
     const allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
-        return userIds!==currentQuizz.id;
+        for(x=0;x<userIds.length;x++){
+            if(userIds[x]===currentQuizz.id){
+                return false;
+            }
+        else return true;
+        }
     })
     console.log(allOtherQuizzes)
     otherQuizzesRenders.innerHTML="";
@@ -564,11 +577,11 @@ function restartQuizz(){
     console.log(id)
     startQuizz(id)
 }
-function editQuizz(event){
+function editQuizz(quizzId){
     console.log("isso vai para a tela de editar quizz")
     
 }
-function deleteQuizz(event){
+function deleteQuizz(quizzId){
     console.log("isso vai para a tela de deletar quizz")
     
 }
