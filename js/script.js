@@ -60,6 +60,7 @@ function quizzCreatorProceed(element){
     }
 }
 function updateLocalQuizzes(quizzId,quizzKey){
+    //as ids dos quizzes
     let localQuizzListUpdate =[];
     if(localStorage.getItem("localQuizzList")){
         localQuizzListUpdate=JSON.parse(localStorage.getItem("localQuizzList"))
@@ -68,6 +69,7 @@ function updateLocalQuizzes(quizzId,quizzKey){
     localStorage.setItem("localQuizzList", JSON.stringify(localQuizzListUpdate));
     console.log(localQuizzListUpdate)
     console.log(localStorage.getItem("localQuizzList"))
+    //as keys dos quizzes
     let localQuizzListKeyUpdate =[];
     if(localStorage.getItem("localQuizzKeyList")){
         localQuizzListKeyUpdate=JSON.parse(localStorage.getItem("localQuizzKeyList"))
@@ -336,8 +338,8 @@ function renderQuizzes(allQuizzes){
     //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
     const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
     const userKeys=JSON.parse(localStorage.getItem("localQuizzKeyList"))
-    
-    if(userIds){
+    console.log(userIds)
+    if(userIds&&userIds.length>0){
         const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
             for(let x=0;x<userIds.length;x++){
                 if(currentQuizz.id===userIds[x]){
@@ -373,19 +375,21 @@ function renderQuizzes(allQuizzes){
     //interrompe o bubbling nos sideButtons
     document.querySelectorAll(".sideButtons").forEach((element)=> element.addEventListener("click", stopEvent, false))
     //renderiza os quizzes de todo mundo
-    let allOtherQuizzes
-    if(userIds){
+    let allOtherQuizzes = allQuizzes.data
+    console.log(allOtherQuizzes)
+    if(userIds&&userIds.length>0){
         allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
             for(x=0;x<userIds.length;x++){
                 if(userIds[x]===currentQuizz.id){
+
                     return false;
                 }
-                else return true;
+                else {
+                    console.log("deu diferente")
+                    return true;
+                } 
             }
         })
-    }
-    else{
-        allOtherQuizzes = allQuizzes.data
     }
     console.log(allOtherQuizzes)
     otherQuizzesRenders.innerHTML="";
@@ -592,8 +596,29 @@ function editQuizz(quizzId,quizzKey){
 }
 function deleteQuizz(quizzId,quizzKey){
     if (confirm("Tem certeza que deseja deletar este quizz?") == true){
-    console.log("isso vai para a tela de deletar quizz id e chave: "+quizzId +" "+quizzKey)
+        console.log("isso vai para a tela de deletar quizz id e chave: "+quizzId +" "+quizzKey)
+        const config = {
+            headers:{
+              "Secret-Key": quizzKey
+            }
+        }
+        const promisse = axios.delete("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/"+quizzId, config)
+        promisse.then(function (response){
+            deleteFromLocalStorage(quizzId)
+            alert("Quizz deletado!")
+            window.location.reload()
+        })
+        promisse.catch(catchError)
     }
+}
+function deleteFromLocalStorage(quizzId){
+    const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
+    const userKeys=JSON.parse(localStorage.getItem("localQuizzKeyList"))
+    quizzIndex=userIds.indexOf(quizzId)
+    userIds.splice(quizzIndex,1)
+    userKeys.splice(quizzIndex,1)
+    localStorage.setItem("localQuizzList",JSON.stringify(userIds))
+    localStorage.setItem("localQuizzKeyList",JSON.stringify(userKeys))
 }
 function stopEvent(event) {
     event.stopPropagation();
