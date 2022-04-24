@@ -8,10 +8,48 @@ let main = (page) => document.querySelectorAll(`main`)[page]
 function quizzCreator(){
     main(0).classList.toggle(`active`)
     main(2).classList.toggle(`active`)
+    //add os eventos de checagem dos campos aqui
+    const allInfoInputs= document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
+    for(let x=0;x<allInfoInputs.length;x++){
+        allInfoInputs[x].addEventListener('input', infosValidationEvent)
+    }
 }
 function homeButton(element){
     window.location.reload()
     requestRenderQuizzes();
+}
+function infosValidationEvent(inputInfo){
+    const allInfoInputs = document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
+    const allInfoWarnings = document.querySelectorAll(`.quizzCreationGeneralInfos h3`)
+    const quizzTitle = allInfoInputs[0].value
+    const imageUrl = allInfoInputs[1].value
+    const questionAmount = Number(allInfoInputs[2].value)
+    const levelsAmount = Number(allInfoInputs[3].value)
+    if(quizzTitle.length < 20 || quizzTitle.length > 65){
+        allInfoWarnings[0].innerText="O título deve ter pelo menos 20 caracteres"
+    }
+    else{
+        allInfoWarnings[0].innerText=""
+    }
+    if(imageUrl.substring(0,8)!=="https://"){
+        allInfoWarnings[1].innerText="A URL precisa ser válida!"
+    }
+    else{
+        allInfoWarnings[1].innerText=""
+    }
+    if(questionAmount < 3){
+        allInfoWarnings[2].innerText="O quizz deve ter no mínimo 3 perguntas"
+    }
+    else{
+        allInfoWarnings[2].innerText=""
+    }
+    if(levelsAmount < 2){
+        allInfoWarnings[3].innerText="O quizz deve ter no mínimo 2 níveis"
+    }
+    else{
+        allInfoWarnings[3].innerText=""
+    }
+
 }
 let quizzCreatorChangePages = (pages) => document.querySelectorAll(".quizzCreation > section")[pages].classList.toggle("active")
 function quizzCreatorProceed(element){
@@ -120,6 +158,11 @@ function questionsGenerator(infos){
    for(let i = 1; i < questionNumbers + 1; i++){
         CreateQuestionsPage.innerHTML += questionSection(i)
    }
+   const allInfoInputs= document.querySelectorAll(`.question .inputInfos`)
+   for(let x=0;x<allInfoInputs.length;x++){
+       allInfoInputs[x].addEventListener('input', questionsValidationEvent)
+       allInfoInputs[x].classList.add("teste")
+   }
    CreateQuestionsPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
    CreateQuestionsPage.querySelector(`.open-icon`).classList.toggle(`active`)
    CreateQuestionsPage.innerHTML += `<button class="proceedToLevels btn" onclick="quizzCreatorProceed(this)">Prosseguir para criar níveis</button>`
@@ -134,25 +177,35 @@ function questionSection(i){
         <div class="quizzCreationInfos">
             <div class="quizzCreationInputBox">
                 <input class="inputInfos" type="text" placeholder="Texto da pergunta">
+                <h3></h3>
                 <input class="inputInfos" type="text" placeholder="Cor de fundo da pergunta">
+                <h3></h3>
             </div>
             <h1>Resposta correta</h1>
             <div class="quizzCreationInputBox">
                 <input class="inputInfos" type="text" placeholder="Resposta correta">
+                <h3></h3>
                 <input class="inputInfos" type="text" placeholder="URL da imagem">
+                <h3></h3>
             </div>
             <h1>Respostas incorretas</h1>
             <div class="quizzCreationInputBox">
                 <input class="inputInfos" type="text" placeholder="Resposta incorreta 1">
+                <h3></h3>
                 <input class="inputInfos" type="text" placeholder="Url da imagem 1">
+                <h3></h3>
             </div>
             <div class="quizzCreationInputBox">
                 <input class="inputInfos" type="text" placeholder="Resposta incorreta 2">
+                <h3></h3>
                 <input class="inputInfos" type="text" placeholder="Url da imagem 2">
+                <h3></h3>
             </div>
             <div class="quizzCreationInputBox">
                 <input class="inputInfos" type="text" placeholder="Resposta incorreta 3">
+                <h3></h3>
                 <input class="inputInfos" type="text" placeholder="Url da imagem 3">
+                <h3></h3>
             </div> 
         </div>
     </section>
@@ -229,13 +282,13 @@ function questionsValidation(){
         for(let x=1;x<allQuestionInput.length;x++){
             const currentQuestionChecked = allQuestionInput[x].querySelectorAll(".inputInfos")
             if(currentQuestionChecked[0].value!=="" ){
-                if(currentQuestionChecked[0].value.length<0){
-                    console.log("texto da pergunta "+x + " muito curto em y"+y)
+                if(currentQuestionChecked[0].value.length<=0){
+                    console.log("texto da resposta "+x + " muito curto em y"+y)
                     return false
                 }
                 if(currentQuestionChecked[1].value.substring(0,8)!=="https://")
                 {
-                    console.log("erro na url da pergunta "+x +" em y"+y)
+                    console.log("erro na url da resposta "+x +" em y"+y)
                     return false
                 }
                 if(x>1){
@@ -268,6 +321,38 @@ function questionsValidation(){
     }
     console.log(globalCreatedQuizz)
     return true
+}
+function questionsValidationEvent(inputInfo){
+    console.log("evento chamado")
+    const allQuestion= document.querySelectorAll(".question");
+    for(let y=0;y<allQuestion.length;y++){
+        const allQuestionInput = allQuestion[y].querySelectorAll(`.quizzCreationInputBox`)
+        const questionTitle = allQuestionInput[0]
+        let wrongAnswerAmount=0;
+        console.log(questionTitle)
+        if(questionTitle.querySelectorAll(".inputInfos")[0].value.length < 20 ){
+            questionTitle.querySelector("h3")[0].innerText="O texto da pergunta deve ser maior que 20 caracteres"
+        }
+        if(!isHexColor(questionTitle.querySelectorAll(".inputInfos")[1].value)){
+           questionTitle.querySelector("h3")[0].innerText="A cor precisa ser valida no formato RGB hexadecimal!"
+        }
+        for(let x=1;x<allQuestionInput.length;x++){
+            const currentQuestionChecked = allQuestionInput[x].querySelectorAll(".inputInfos")
+            const currentWarningsChecked = allQuestionInput[x].querySelectorAll("h3")
+            if(x===1&&currentQuestionChecked[0].value===""){
+                questionTitle.querySelector("h3")[0].innerText="É necessário uma resposta correta!"
+            }
+            if(x===2&&currentQuestionChecked[0].value===""){
+                questionTitle.querySelector("h3")[0].innerText="É necessário pelo menos uma resposta errada!"
+            }
+            if(currentQuestionChecked[0].value!=="" ){
+                if(currentQuestionChecked[1].value.substring(0,8)!=="https://"){
+                    questionTitle.querySelector("h3")[1].innerText="Preencha uma URL válida!"
+                }
+
+            }
+        }
+    }
 }
 //Cria os Levels
 function levelsGenerator(infos){
@@ -596,7 +681,6 @@ function editQuizz(quizzId,quizzKey){
 }
 function deleteQuizz(quizzId,quizzKey){
     if (confirm("Tem certeza que deseja deletar este quizz?") == true){
-        console.log("isso vai para a tela de deletar quizz id e chave: "+quizzId +" "+quizzKey)
         const config = {
             headers:{
               "Secret-Key": quizzKey
