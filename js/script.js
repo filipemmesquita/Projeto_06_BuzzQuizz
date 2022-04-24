@@ -69,13 +69,13 @@ function updateLocalQuizzes(quizzId,quizzKey){
     console.log(localQuizzListUpdate)
     console.log(localStorage.getItem("localQuizzList"))
     let localQuizzListKeyUpdate =[];
-    if(localStorage.getItem("localQuizzkeyList")){
-        localQuizzListKeyUpdate=JSON.parse(localStorage.getItem("localQuizzkeyList"))
+    if(localStorage.getItem("localQuizzKeyList")){
+        localQuizzListKeyUpdate=JSON.parse(localStorage.getItem("localQuizzKeyList"))
     }
     localQuizzListKeyUpdate.push(quizzKey);
-    localStorage.setItem("localQuizzkeyList", JSON.stringify(localQuizzListKeyUpdate));
+    localStorage.setItem("localQuizzKeyList", JSON.stringify(localQuizzListKeyUpdate));
     console.log(localQuizzListKeyUpdate)
-    console.log(localStorage.getItem("localQuizzkeyList"))
+    console.log(localStorage.getItem("localQuizzKeyList"))
 }
 function renderQuizzCreationFinish(quizzId){
     document.querySelector(".quizzCreationFinish").innerHTML=`
@@ -335,6 +335,7 @@ function renderQuizzes(allQuizzes){
     console.log(allQuizzes)
     //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
     const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
+    const userKeys=JSON.parse(localStorage.getItem("localQuizzKeyList"))
     
     if(userIds){
         const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
@@ -354,13 +355,15 @@ function renderQuizzes(allQuizzes){
          //renderiza os quizzes do usuario
         userQuizzesRenders.innerHTML=""
         for(x=0;x<allUserQuizzes.length;x++){
+        const keyIndex =userIds.indexOf(allUserQuizzes[x].id);
+            console.log(allUserQuizzes[x].id + " , " + userKeys[keyIndex] + " [" + keyIndex)
         userQuizzesRenders.innerHTML+=`
         <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
             <div onclick="startQuizz(${allUserQuizzes[x].id})">
             <h2>${allUserQuizzes[x].title}</h2>
                 <div class="sideButtons">
-                    <div onclick="editQuizz(${allUserQuizzes[x].id})"><ion-icon name="create-outline"></ion-icon></div>
-                    <div onclick="deleteQuizz(${allUserQuizzes[x].id})"><ion-icon name="trash-outline"></ion-icon></div>
+                    <div onclick="editQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="create-outline"></ion-icon></div>
+                    <div onclick="deleteQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="trash-outline"></ion-icon></div>
                 </div>
             </div>
         </li>`
@@ -370,14 +373,20 @@ function renderQuizzes(allQuizzes){
     //interrompe o bubbling nos sideButtons
     document.querySelectorAll(".sideButtons").forEach((element)=> element.addEventListener("click", stopEvent, false))
     //renderiza os quizzes de todo mundo
-    const allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
-        for(x=0;x<userIds.length;x++){
-            if(userIds[x]===currentQuizz.id){
-                return false;
+    let allOtherQuizzes
+    if(userIds){
+        allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
+            for(x=0;x<userIds.length;x++){
+                if(userIds[x]===currentQuizz.id){
+                    return false;
+                }
+                else return true;
             }
-        else return true;
-        }
-    })
+        })
+    }
+    else{
+        allOtherQuizzes = allQuizzes.data
+    }
     console.log(allOtherQuizzes)
     otherQuizzesRenders.innerHTML="";
     for(x=0;x<allOtherQuizzes.length;x++){
@@ -577,13 +586,14 @@ function restartQuizz(){
     console.log(id)
     startQuizz(id)
 }
-function editQuizz(quizzId){
+function editQuizz(quizzId,quizzKey){
     console.log("isso vai para a tela de editar quizz")
     
 }
-function deleteQuizz(quizzId){
-    console.log("isso vai para a tela de deletar quizz")
-    
+function deleteQuizz(quizzId,quizzKey){
+    if (confirm("Tem certeza que deseja deletar este quizz?") == true){
+    console.log("isso vai para a tela de deletar quizz id e chave: "+quizzId +" "+quizzKey)
+    }
 }
 function stopEvent(event) {
     event.stopPropagation();
