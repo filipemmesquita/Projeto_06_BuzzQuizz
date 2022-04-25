@@ -6,20 +6,19 @@ body{
 *{
     box-sizing: border-box;
 }
-/*Configurações Gerais*/
-main{
-    padding: 0 0 31px 0;
-    margin: 69px auto 0 auto;
-    display: none;
-    flex-direction: column;
-    align-items: center;
+main h1{
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
 }
+
 /*Header*/
 .topBar{
     width: 100%;
     height: 69px;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     top: 0;
     right: 0;
     background: #EC362D;
@@ -27,128 +26,115 @@ main{
     display: flex;
     align-items: center;
     justify-content: center;
-}
-    .topBar h1{
+}   .topBar h1{
         font-weight: 700;
         font-size: 37px;
         line-height: 43px;
         color: #FFFFFF;
     }
-/*Buttons*/
-button{ /*Resetar o css default do button*/
-    background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
-}   .btn{
-        background: #EC362D;
-        border-radius: 15px;
-        width:360px;
-        height:54px;
-        margin: 30px;
-        /*Text do Button*/
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 21px;
+/*Main*/
+.mainPage{
+    padding: 69px 0;
+    width: 100%;    
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}   .loadingScreen{ 
+        padding-top: 69px;
+        position: fixed;
+        z-index: 0;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
-        text-align: center;
-        justify-content: center;
-        color: #FFF5F4;
-    }
-    .homeButton{
-        width: 220px;
-        height: 44px;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 21px;
-        color: #818181;
-    }
-/*Config todas as Mains*/
-main h1{
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 23px;
-    color: #000000;
-}
-/*Main-Page*/
-.mainpage{
-    /*Desktop Width = (nDeQuizz x 340px) + ((nDeQuizz - 1) x 15px)*/
-    margin-top: 100px;
-    min-width: 340px;
-    width: 100%;
-}
-/*MainPage > Container*/
-.userQuizzes{
-    padding-bottom: 31px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width:100%;
-}   /*MainPage > User-Quizz-Empty*/
-    .userEmptyQuizzes{
-        padding: 40px 0 33px 0;
-        width: 340px;
-        height: 181px;
-        background: #FAFAFA;
-        border: 1px dashed #D5D5D5;
-        border-radius: 5px;
-        display: none;
         flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-    }   .emptyText{
-            width: 240px;
-            font-weight: 400;
-            font-size: 20px;
-            line-height: 23px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            color: #B9B9B9;      
+        justify-content: center;
+
+    }   .loading{
+            width: 76px;
+            height: 76px;
         }
-        .createQuizz{/*button*/
-            width: 151px;
-            height: 40px;
-            background: #FAFAFA;
-            border: 1px dashed #EC362D;
-            box-sizing: border-box;
-            border-radius: 50px;
-            /*Texto do Button*/
+        .loadingScreen p{
+            margin-top: 25px;
             font-weight: 400;
-            font-size: 21px;
-            line-height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 25px;
+            line-height: 29px;
             color: #EC362D;
         }
-    /*MainPage > User-Quizz-Filled*/
-    .userAllQuizzes{
-        display: none;
+    .userQuizzes{
+        padding: 31px 0;
+        display: flex;
+        align-items: center;
         flex-direction: column;
         width:100%;
-    }   .navContainer{
+    }
+       /*MainPage > User-Quizz-Empty*/
+        .userEmptyQuizzes{
+            padding: 40px 0 33px 0;
             width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }   .createQuizzIcon{
-                color: #EC362D;
-                width: 31px;
-                height: 31px;
-                margin-left: 17px;
-            }
-        .mainpage ul{
+            height: 181px;
+            background: #FAFAFA;
+            border: 1px dashed #D5D5D5;
+            border-radius: 5px;
             display: flex;
             flex-direction: column;
-        }
-        .mainpage ul div{
-            display: flex;
             align-items: center;
+            justify-content: space-between;
+        }   .emptyText{
+                width: 240px;
+                font-weight: 400;
+                font-size: 20px;
+                line-height: 23px;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                color: #B9B9B9;      
+            }
+            .createQuizz{/*button*/
+                width: 151px;
+                height: 40px;
+                background: #FAFAFA;
+                border: 1px dashed #EC362D;
+                box-sizing: border-box;
+                border-radius: 50px;
+                /*Texto do Button*/
+                font-weight: 400;
+                font-size: 21px;
+                line-height: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #EC362D;
+            }
+            .userAllQuizzes{
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }   .navContainer{
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }   .createQuizzIcon{
+                        color: #EC362D;
+                        width: 31px;
+                        height: 31px;
+                        margin-left: 17px;
+                    }
+                .otherQuizzes ul,
+                .quizzByUser ul{
+                    display: flex;
+                    flex-direction: column;
+                }
+                .mainpage ul div{
+                    display: flex;
+                    align-items: center;
+                }
+        .allQuizzes h1{
+            margin-bottom: 7.5px;
         }
 /*Main > Quizz-Page > QuestionScreen (Tela-2)*/
 .quizzBox{
@@ -157,7 +143,6 @@ main h1{
     background: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
     width: 760px;
-    height: 100%;
 }   /*QuestionScreen - Header*/
     .quizzPageHeader{
         position: relative;
@@ -287,7 +272,8 @@ main h1{
     .quizz h2{ /*Titulo do Quizz*/
         position: absolute;
         width: 309px;
-        height: 54px;
+        min-height: 54px;
+        left: 15.5px;
         bottom: 6px;
         font-weight: 400;
         font-size: 19px;
@@ -297,134 +283,169 @@ main h1{
         word-wrap: break-word;
     }
 
-
-
-
-
-.quizzCreationGeneralInfos{
-    width: 100%;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-}
-/*Main - QuizzCreation*/
-.infos{
-    padding: 30px 0;
-    width: 100%;
-    text-align: center;
-}
-.open-icon{ /*Icone para abrir mais informações*/
-    display: none;
-    width: 26px;
-    height: 26px;
-}
-.inputInfos{
-    padding: 13px 0 11px 14px;
-    width: 100%;
-    height: 46px;
-    background: #FFFFFF;
-    border: 1px solid #D1D1D1;
-    box-sizing: border-box;
-    border-radius: 5px;
-}
-    .inputinfos::placeholder{
-        font-style: italic;
-        font-weight: 400;
-        font-size: 19px;
-        line-height: 22px;
-        color: #BABABA;
-    }
-    .quizzCreationInputBox{
-        margin-top: 15px;
-        margin-bottom: 15px;
+    .quizzCreationGeneralInfos{
         width: 100%;
-        height: 106px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-    }   /*Input Especifico do Level*/
-        .description{
-        height: 177px;
-        } 
-.box{
-    padding: 21px 15px;
-    width: 100%;
-    margin: 0 auto 24px auto;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-/*Section GeneralInfos*/
-
-/*Section QuizzCreation - GeneralInfos, Questions e Level*/
-.quizzCreationQuestions,
-.quizzCreationLevels{
-    width: 100%;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-}/*Mobile Design*/
-.quizzCreationInfos{
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    scroll-margin-top: 140px;
-}/*Aparecer no onclick*/
-.quizzCreationInfo > div:last-child{
-    margin-bottom: 0px;
-}/*Questions - Layout*/
-.questionTitle,
-.levelTitle{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}/*Design Title*/
-.generalInfos:last-of-type,
-.question:last-of-type,
-.level:last-of-type{
-    margin-bottom: 0px;
-}/*Não interferir no Padding da do Butão*/
-.generalInfos input,
-.level input{
-    margin: 7.5px 0;
-}   .generalInfos input:first-of-type{
-        margin-top: 0px;
-    }  /*Não interferir no Padding da Box*/
-    .level input:first-of-type{
-        margin-top: 15px;
-    } /*Margin Correta para o primeiro input*/
-    .generalInfos input:last-of-type,
-    .level input:last-of-type{
-        margin-bottom: 0px;
-    } /*Não interferir no Padding da Box*/
-/*Section Finish*/
-.quizzCreationFinish{
-    width: 100%;
-    display: none;
-    align-items: center;
-    flex-direction: column;
-}
-.active{ /*Para testes!*/
-    display: flex;
-}
-.sideButtons{
-    right:0;
-    top:10px;
-    width:43px;
-    height:86px;
-    background: #EC362D;
-    border-radius: 10px 0px 0px 11px;
-    position:absolute;
-    display: flex;
-    flex-direction: column;
-}
-    .sideButtons div{
-        height: 42px;
         align-items: center;
-        color:white;
-        font-size: 25px;
+    }
+    /*Main - QuizzCreation*/
+    .infos{
+        padding: 30px 0;
+        width: 100%;
+        text-align: center;
+    }
+    .open-icon{ /*Icone para abrir mais informações*/
+        display: none;
+        width: 26px;
+        height: 26px;
+    }
+    .inputInfos{
+        padding: 13px 0 11px 14px;
+        width: 100%;
+        height: 46px;
+        background: #FFFFFF;
+        border: 1px solid #D1D1D1;
+        box-sizing: border-box;
+        border-radius: 5px;
+    }
+        .inputinfos::placeholder{
+            font-style: italic;
+            font-weight: 400;
+            font-size: 19px;
+            line-height: 22px;
+            color: #BABABA;
+        }
+        .quizzCreationInputBox{
+            margin-top: 15px;
+            margin-bottom: 15px;
+            width: 100%;
+            height: 106px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }   /*Input Especifico do Level*/
+            .description{
+                height: 177px;
+            }
+            .description::placeholder{
+                position: absolute;
+            }
+            .description::target-text{
+                position: absolute;
+            }
+    .box{
+        padding: 21px 15px;
+        width: 100%;
+        margin: 0 auto 24px auto;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    /*Section GeneralInfos*/
+    
+    /*Section QuizzCreation - GeneralInfos, Questions e Level*/
+    .quizzCreationQuestions,
+    .quizzCreationLevels{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }/*Mobile Design*/
+    .quizzCreationInfos{
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        scroll-margin-top: 140px;
+    }/*Aparecer no onclick*/
+    .quizzCreationInfo > div:last-child{
+        margin-bottom: 0px;
+    }/*Questions - Layout*/
+    .questionTitle,
+    .levelTitle{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }/*Design Title*/
+    .generalInfos:last-of-type,
+    .question:last-of-type,
+    .level:last-of-type{
+        margin-bottom: 0px;
+    }/*Não interferir no Padding da do Butão*/
+    .generalInfos input,
+    .level input{
+        margin: 7.5px 0;
+    }   .generalInfos input:first-of-type{
+            margin-top: 0px;
+        }  /*Não interferir no Padding da Box*/
+        .level input:first-of-type{
+            margin-top: 15px;
+        } /*Margin Correta para o primeiro input*/
+        .generalInfos input:last-of-type,
+        .level input:last-of-type{
+            margin-bottom: 0px;
+        } /*Não interferir no Padding da Box*/
+    /*Section Finish*/
+    .quizzCreationFinish{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+    .active{ /*Para testes!*/
+        display: flex;
+    }
+    .sideButtons{
+        right:0;
+        top:10px;
+        width:43px;
+        height:86px;
+        background: #EC362D;
+        border-radius: 10px 0px 0px 11px;
+        position:absolute;
+        display: flex;
+        flex-direction: column;
+    }
+        .sideButtons div{
+            height: 42px;
+            align-items: center;
+            color:white;
+            font-size: 25px;
+        }
+/*Buttons*/
+button{ /*Resetar o css default do button*/
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}   .btn{
+        background: #EC362D;
+        border-radius: 15px;
+        width:360px;
+        height:54px;
+        margin: 30px;
+        /*Text do Button*/
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        color: #FFF5F4;
+    }
+    .homeButton{
+        width: 220px;
+        height: 44px;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #818181;
     }

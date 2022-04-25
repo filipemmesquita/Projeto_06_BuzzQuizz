@@ -7,70 +7,15 @@
     <title>BuzzQuizz</title>
     <link rel="stylesheet"  href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" media="screen and (max-width: 1100px)" href="css/mobile.css">
-    <link rel="stylesheet" media="screen and (min-width: 1100px)" href="css/desktop.css">
+    <link rel="stylesheet" media="screen and (max-width: 1000px)" href="css/mobile.css">
+    <link rel="stylesheet" media="screen and (min-width: 1000px)" href="css/desktop.css">
 
 </head>
 <body onload="requestRenderQuizzes()">
-
-    <header class="topBar"> <!--Feito-->
+    <header class="topBar">
         <h1>BuzzQuizz</h1>
     </header>
-    <!--tela 1-->
-    <main class="mainpage active">
-        <div class="userQuizzes">
-            <section class="userEmptyQuizzes active">
-                <h2 class="emptyText">Você não criou nenhum quizz ainda :(</h2>
-                <button class="createQuizz" onclick="quizzCreator()">Criar Quizz</button>
-            </section>
-            <section class="userAllQuizzes "> <!--Quando usuário tiver 1 quizz-->
-                <nav class="navContainer">
-                    <h1>Seus Quizzes</h1>
-                    <ion-icon class="createQuizzIcon" name="add-circle" onclick="quizzCreator()"></ion-icon>
-                </nav>
-                <ul class="quizzByUser">
-                </ul>
-            </section>
-        </div>
-        <section class="allQuizzes">
-            <h1>Todos os Quizzes</h1>
-            <ul class="otherQuizzes">
-            </ul>
-        </section>
-    </main>
-    <!--tela 2-->
-    <main class="quizzPage">
-    </main>
-    <!--tela 3-->
-    <main class="quizzCreation">
-        <h1 class="infos"> <!--Ideia é mudar o html pelo JS-->
-            Comece pelo começo
-        </h1>
-        <section class="quizzCreationGeneralInfos active">
-            <div class="generalInfos box">
-                <input class="inputInfos" type="text" placeholder="Título do seu quizz">
-                <h3></h3>
-                <input class="inputInfos" type="text" placeholder="URL da imagem do seu quizz">
-                <h3></h3>
-                <input class="inputInfos" type="number" placeholder="Quantidade de perguntas do quizz">
-                <h3></h3>
-                <input class="inputInfos" type="number" placeholder="Quantidade de níveis do quizz">
-                <h3></h3>
-            </div>
-            <button class="proceedToQuestions btn" onclick="quizzCreatorProceed(this)">Prosseguir para criar perguntas</button>
-        </section>
-        <section class="quizzCreationQuestions">
-        </section>
-        <section class="quizzCreationLevels">
-        </section>
-        <section class="quizzCreationFinish ">
-            <div>
-            <h2>O quão potterhead é você?</h2>
-            </div>
-            
-            <button class="quizzAccess btn">Acessar Quizz</button>
-            <button class="homeButton" onclick="homeButton(this)">Voltar para home</button>
-        </section>
+    <main class="mainPage">
     </main>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/script.js"></script>

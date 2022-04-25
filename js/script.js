@@ -4,19 +4,328 @@ const globalCreatedQuizz ={
     questions: [],
     levels: []
 }
-let main = (page) => document.querySelectorAll(`main`)[page]
+function homeButton(element){
+    window.location.reload()
+    requestRenderQuizzes();
+}
+const mainPage = () => document.querySelector(`.mainPage`);
+const cleanMainPage = () => mainPage().innerHTML = '\n   ';
+const loadingScreen = () => {
+    mainPage().innerHTML += `
+    <section class="loadingScreen">
+        <img class="loading" src="imagens/loading.gif" alt="loading...">
+        <p>Carregando</p>
+    </section>
+    `;
+}
+const removeLoading = () => document.querySelector(`.loadingScreen`).remove();
+//Tela 1 - Tela Principal
+function requestRenderQuizzes(){
+    loadingScreen()
+    promisse = axios.get("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes")
+    promisse.then(renderQuizzes)
+    promisse.catch(catchError)
+}
+function renderQuizzes(allQuizzes){
+    mainPage().innerHTML += `
+    <div class= "mainPageContainer">
+        <div class="userQuizzes">
+        </div>
+    </div>
+    `;
+    let userQuizzes = document.querySelector(`.userQuizzes`);
+    userQuizzes.innerHTML += userEmptyQuizzesSection()
+    userQuizzes.innerHTML += userAllQuizzesSection()
+    document.querySelector(`.mainPageContainer`).innerHTML += allQuizzesSection()
+    const otherQuizzesRenders=document.querySelector(".otherQuizzes")
+    const userQuizzesRenders=document.querySelector(".quizzByUser")
+    console.log(allQuizzes)
+    //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
+    const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
+    const userKeys=JSON.parse(localStorage.getItem("localQuizzKeyList"))
+    console.log(userIds)
+    if(userIds&&userIds.length>0){
+        const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
+            for(let x=0;x<userIds.length;x++){
+                if(currentQuizz.id===userIds[x]){
+                    return true        
+                }
+            }
+            return false;
+        })
+        
+        //checa se há há algum quizz do usuario
+        if(allUserQuizzes.length>0){
+            document.querySelector(`.userEmptyQuizzes`).remove()
+            //renderiza os quizzes do usuario
+            userQuizzesRenders.innerHTML=""
+            for(x=0;x<allUserQuizzes.length;x++){
+            const keyIndex =userIds.indexOf(allUserQuizzes[x].id);
+                console.log(allUserQuizzes[x].id + " , " + userKeys[keyIndex] + " [" + keyIndex)
+            userQuizzesRenders.innerHTML+=`
+            <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
+                <div onclick="startQuizz(${allUserQuizzes[x].id})">
+                <h2>${allUserQuizzes[x].title}</h2>
+                    <div class="sideButtons">
+                        <div onclick="editQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="create-outline"></ion-icon></div>
+                        <div onclick="deleteQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="trash-outline"></ion-icon></div>
+                    </div>
+                </div>
+            </li>`
+        }
+        } else {
+            document.querySelector(`.userAllQuizzes`).remove()
+        }
+    }
+    //interrompe o bubbling nos sideButtons
+    document.querySelectorAll(".sideButtons").forEach((element)=> element.addEventListener("click", stopEvent, false))
+    //renderiza os quizzes de todo mundo
+    let allOtherQuizzes = allQuizzes.data
+    console.log(allOtherQuizzes)
+    if(userIds&&userIds.length>0){
+        allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
+            for(x=0;x<userIds.length;x++){
+                if(userIds[x]===currentQuizz.id){
+
+                    return false;
+                }
+                else {
+                    console.log("deu diferente")
+                    return true;
+                } 
+            }
+        })
+    }
+    console.log(allOtherQuizzes)
+    otherQuizzesRenders.innerHTML="";
+    for(x=0;x<allOtherQuizzes.length;x++){
+    otherQuizzesRenders.innerHTML+=`
+    <li class="quizz"  style="background-image: url('${allOtherQuizzes[x].image}');"> 
+        <div onclick="startQuizz(${allOtherQuizzes[x].id})">
+        <h2>${allOtherQuizzes[x].title}</h2>
+        </div>
+    </li>`
+    }
+    if(!userQuizzesRenders.innerHTML === '\n            '){
+        document.querySelector(`userEmptyQuizzes`).remove()
+    }
+    removeLoading()
+}   
+function userEmptyQuizzesSection(){
+    return `
+    <section class="userEmptyQuizzes">
+        <h2 class="emptyText">Você não criou nenhum quizz ainda :(</h2>
+        <button class="createQuizz" onclick="quizzCreator()">Criar Quizz</button>
+    </section>
+    `
+}
+function userAllQuizzesSection(){
+        return `
+        <section class="userAllQuizzes "> <!--Quando usuário tiver 1 quizz-->
+            <nav class="navContainer">
+                <h1>Seus Quizzes</h1>
+                <ion-icon class="createQuizzIcon" name="add-circle" onclick="quizzCreator()"></ion-icon>
+            </nav>
+            <ul class="quizzByUser">
+            </ul>
+        </section>
+        `
+}
+function allQuizzesSection(){
+        return `
+        <section class="allQuizzes">
+            <h1>Todos os Quizzes</h1>
+            <ul class="otherQuizzes">
+            </ul>
+        </section>
+        `
+}
+//Tela 2 - Jogando o Quizz
+function startQuizz(id){
+    cleanMainPage()
+    loadingScreen()
+    const quizzToPlayPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`) //Tem que mudar o Id do final para saber qual é o quizz.
+    quizzToPlayPromisse.then(QuizzInfos)
+    quizzToPlayPromisse.catch()
+}
+let thenQuizz;
+function QuizzInfos(quizz){
+    createQuizz(quizz)
+    thenQuizz = quizz
+}
+let arrayEmbaralhada = []
+function createQuizz(quizz){
+    const quizzInfos = quizz.data
+    mainPage().setAttribute("id", quizzInfos.id) // Dizer qual é o jogo
+    //Funcionando até
+    mainPage().style.margin ="0 auto";
+    mainPage().innerHTML += sectionQuizzHeaderAndContainer(quizzInfos) //Cria o Header
+    for(let i = 0; i < quizzInfos.questions.length; i++){
+        mainPage().innerHTML += sectionQuizzQuestion() //Cria a Section da Questão
+        const section = document.querySelectorAll(`.quizzQuestion`)[i] //Pega a Questão
+        section.innerHTML = sectionQuizzQuestionContent(quizzInfos.questions[i]) //Criar o conteudo de cada Questão.
+        const alternatives = document.querySelectorAll(`.allAlternatives`)[i]//Pegar todas as alternativas
+        const answers = []
+        for(let j = 0; j < quizzInfos.questions[i].answers.length;j++){ //Pegar quantidade de perguntas, e poder embaralhar seus objetos(img e texto não!)
+            answers.push(quizzInfos.questions[i].answers[j])
+        }
+        answers.sort(comparador)
+        arrayEmbaralhada.push(answers)
+        for(let x = 0; x < answers.length; x++){
+            alternatives.innerHTML += liQuizzQuestionAlternatives(answers[x]);
+        }
+    }
+    document.querySelector(`html`).scrollIntoView(true)
+    removeLoading()
+}
+function comparador() { 
+	return Math.random() - 0.5; 
+}
+//Funções de criação do Quizz - Tela 2
+function sectionQuizzHeaderAndContainer(quizz){
+    return `
+    <section class="quizzPageHeader" style="background-image: url(${quizz.image});">
+        <h1>${quizz.title}</h1>
+    </section>
+    `
+}
+function sectionQuizzQuestion(){
+    return`
+    <section class="quizzQuestion quizzBox">
+    </section>
+    `
+}
+function sectionQuizzQuestionContent(question){
+    return `
+    <div class="quizzQuestionTitle" style="background-color: ${question.color};">
+        <h1 class="quizzTopTitle">${question.title}</h1>
+    </div>
+    <ul class="allAlternatives">
+    </ul>
+    `
+}
+function liQuizzQuestionAlternatives(answers){
+    return `
+    <li class="quizzAlternative" onclick="answeringQuestion(this)">
+        <div class="answerImg" style="background-image: url(${answers.image});"></div>
+        <h2>${answers.text}</h2>
+    </li>
+    `
+}
+//Função dos Onclicks -> Respondendo o Quizz!
+const allQuestion = () => document.querySelectorAll(`.quizzQuestion`)
+function answeringQuestion(element){
+    const alternatives = element.parentNode.querySelectorAll(`.quizzAlternative`)//Selecionar todas as alternativas da Questão
+    for(let i = 0; i < alternatives.length; i++){
+        alternatives[i].removeAttribute(`onclick`)//Não poder interagir novamente
+        if(alternatives[i] !== element){//Se for diferente do interagido, ganha opacity
+            alternatives[i].classList.add(`opacity`) 
+        }
+        const alternativesText = alternatives[i].querySelector(`h2`)//Pega o texto especifico
+        const isAnswerRight = arrayEmbaralhada[questionClick(element)]
+        if(isAnswerRight[i].isCorrectAnswer){//Se for true recebe a cor, caso contrario recebe a cor vermelha
+            alternativesText.classList.add(`rightAnswer`)
+        } else {
+            alternativesText.classList.add(`wrongAnswer`)
+        }
+        allQuestion()[questionClick(element)].classList.add(`answered`)
+    }
+    scrollTo()
+    //Se jogo finalizou
+    if(isQuizzFinished()){
+        const object = isQuizzFinished()
+        createQuizzResult(object.level, object.percentageByUser)
+        setTimeout(function(){document.querySelector(`.quizzResult`).scrollIntoView({behavior: "smooth"})}, 2000)
+    }
+}
+function questionClick(element){
+    const questionClicked = element.parentNode.parentNode;
+    for(let i = 0; i < allQuestion().length; i++){
+        if(allQuestion()[i] === questionClicked){
+            return i
+        }
+    }
+}
+function scrollTo(){
+    for(let i = 0; i < allQuestion().length; i++){
+        if(!allQuestion()[i].classList.contains(`answered`)){
+            return setTimeout(function (){allQuestion()[i].scrollIntoView({behavior: "smooth",})}, 2000)
+        }
+    }
+}
+//Função para checar se o Quizz foi totalmente respondido!
+function isQuizzFinished(){
+    const AllLevels = thenQuizz.data.levels
+    const amountOfQuestions = document.querySelectorAll(`.quizzQuestion`)
+    const allRightAnswers = document.querySelectorAll(`.rightAnswer`)
+    if(amountOfQuestions.length === allRightAnswers.length){//Para saber se o jogo acabou
+        let rightAnswerByUser = 0 //Quantidade de Acertos!
+        for(let x = 0; x < allRightAnswers.length; x++){//Para saber se o usuario acertou ou não
+            if(allRightAnswers[x].parentNode.classList.contains(`opacity`)){//quer dizer que errou a questão, pois se ele acerta a reposta não ganha opacidade!
+            } else {
+                rightAnswerByUser++
+            }
+        }
+        const percentageByUser = ((rightAnswerByUser / allRightAnswers.length) * 100)
+        let zIndice;
+        for(let z = 0; z < AllLevels.length; z++){//Saber quantos niveis tem/saber qual o usuario se encaixa
+            if(AllLevels[z].minValue <= percentageByUser){
+                zIndice = z 
+            }
+        }
+        return {
+            level: AllLevels[zIndice],
+            percentageByUser: percentageByUser
+        }
+    }
+    return false
+}
+//Funções de Criação do Resultado do Quizz -> Tela-2
+function createQuizzResult(level, percentageByUser){
+    mainPage().innerHTML += sectionQuizzResult();
+    const resultContent = document.querySelector(`.quizzResult .quizzBox`);
+    resultContent.innerHTML = quizzResultContent(level, percentageByUser);
+    document.querySelector(`.quizzResult`).classList.add(`active`);
+}
+function sectionQuizzResult(){
+    return `
+    <section class="quizzResult">
+            <div class="quizzBox">
+            </div>
+            <button class="restartQuizz btn" onclick="restartQuizz()">Reiniciar Quizz</button>
+            <button class="homeButton" onclick="homeButton()">Voltar Home</button>
+    </section>
+    `
+}
+function quizzResultContent(level, percentageByUser){
+    return `
+    <div class="quizzResultTitle">
+        <h1 class="quizzTopTitle">${percentageByUser.toFixed(0)}% de acerto: ${level.title}</h1>
+    </div>
+    <div class="resultDescription">
+        <img src="${level.image}" alt="">
+        <h2>${level.text}</h2>
+    </div>
+    `
+}
+function restartQuizz(){
+    const id = mainPage().getAttributeNode("id").value
+    arrayEmbaralhada = []
+    startQuizz(id)
+}
+//Tela 3
 function quizzCreator(){
-    main(0).classList.toggle(`active`)
-    main(2).classList.toggle(`active`)
+    cleanMainPage()
     //add os eventos de checagem dos campos aqui
+    mainPage().innerHTML += quizzCreationHeader("Comece pelo começo")
+    mainPage().innerHTML += quizzCreationAllInfosSection()
+    eventCheck()
+}
+function eventCheck(){
     const allInfoInputs= document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
     for(let x=0;x<allInfoInputs.length;x++){
         allInfoInputs[x].addEventListener('input', infosValidationEvent)
     }
-}
-function homeButton(element){
-    window.location.reload()
-    requestRenderQuizzes();
 }
 function infosValidationEvent(inputInfo){
     const allInfoInputs = document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
@@ -51,28 +360,53 @@ function infosValidationEvent(inputInfo){
     }
 
 }
-let quizzCreatorChangePages = (pages) => document.querySelectorAll(".quizzCreation > section")[pages].classList.toggle("active")
+function quizzCreationHeader(title){
+    return `
+    <h1 class="infos">
+        ${title}
+    </h1>
+    `
+}
+function quizzCreationAllInfosSection(){
+    return `
+    <section class="quizzCreationGeneralInfos">
+        <div class="generalInfos box">
+            <input class="inputInfos" type="text" placeholder="Título do seu quizz">
+            <h3></h3>
+            <input class="inputInfos" type="text" placeholder="URL da imagem do seu quizz">
+            <h3></h3>
+            <input class="inputInfos" type="number" placeholder="Quantidade de perguntas do quizz">
+            <h3></h3>
+            <input class="inputInfos" type="number" placeholder="Quantidade de níveis do quizz">
+            <h3></h3>
+        </div>
+        <button class="proceedToQuestions btn" onclick="quizzCreatorProceed(this)">Prosseguir para criar perguntas</button>
+    </section>
+    `
+}
 function quizzCreatorProceed(element){
-    let infosText = document.querySelector(`.infos`)
     const el = element.classList[0]
     if(el === "proceedToQuestions"){
         if(infosValidation()){
-            infosText.innerHTML = "Crie suas perguntas"
-            quizzCreatorChangePages(0)
-            quizzCreatorChangePages(1)
-            questionsGenerator(infosValidation())
-        } else {
-            alert(`Usuário, digite os dados corretamente`)
+            cleanMainPage()
+            mainPage().innerHTML += quizzCreationHeader("Crie suas perguntas")
+            mainPage().innerHTML += `
+            <section class="quizzCreationQuestions">
+            </section>
+            `
+            questionsGenerator(values)
+            console.log(mainPage().innerHTML)
         }
     }
     if(el === "proceedToLevels"){
         if(questionsValidation()){
-            infosText.innerHTML = "Agora, decida os níveis"
-            quizzCreatorChangePages(1)
-            quizzCreatorChangePages(2)
-            levelsGenerator(infosValidation())
-        } else {
-            alert(`Usuário, digite os dados corretamente`)
+            cleanMainPage()
+            mainPage().innerHTML += quizzCreationHeader("Agora, decida os níveis")
+            mainPage().innerHTML += `
+            <section class="quizzCreationLevels">
+            </section>
+            `
+            levelsGenerator(values)
         }
     }if(el === "proceedToFinish"){
         if(levelValidation()){
@@ -80,10 +414,13 @@ function quizzCreatorProceed(element){
             const promisse = axios.post("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes",globalCreatedQuizz)
             promisse.then(function(postResponse){
                 console.log(postResponse)
+                cleanMainPage()
                 updateLocalQuizzes(postResponse.data.id, postResponse.data.key)
-                infosText.innerHTML = "Seu quizz está pronto!"
-                quizzCreatorChangePages(2)
-                quizzCreatorChangePages(3)
+                mainPage().innerHTML += quizzCreationHeader("Seu quizz está pronto!")
+                mainPage().innerHTML += `
+                <section class="quizzCreationFinish">
+                </section>
+                `
                 renderQuizzCreationFinish(postResponse.data.id)
                 globalCreatedQuizz.title=""
                 globalCreatedQuizz.image=""
@@ -91,9 +428,6 @@ function quizzCreatorProceed(element){
                 globalCreatedQuizz.levels.length=0
             })
             promisse.catch(catchError)
-
-        } else {
-            alert(`Usuário, digite os dados corretamente`)
         }
     }
 }
@@ -124,10 +458,10 @@ function renderQuizzCreationFinish(quizzId){
             <h2>${globalCreatedQuizz.title}</h2>
             </div>
         </li>
-
         <button class="quizzAccess btn" onclick="startQuizz(${quizzId})">Acessar Quizz</button>
         <button class="homeButton" onclick="homeButton(this)">Voltar para home</button>`
 }
+let values;
 function infosValidation(){
     const allInfoInputs = document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
     const quizzTitle = allInfoInputs[0].value
@@ -144,19 +478,19 @@ function infosValidation(){
     } 
     globalCreatedQuizz.title=quizzTitle
     globalCreatedQuizz.image=allInfoInputs[1].value
-    return {
+    values = {
         quizztitle: quizzTitle,
         questionamount: questionAmount,
         levelamount: levelsAmount,
     }
+    return true
 }
 function questionsGenerator(infos){
-    
-   const questionNumbers = infos.questionamount
+    console.log(mainPage().innerHTML)
    let CreateQuestionsPage = document.querySelector(`.quizzCreationQuestions`)
-   CreateQuestionsPage.innerHTML="";
-   for(let i = 1; i < questionNumbers + 1; i++){
+   for(let i = 1; i < infos.questionamount + 1; i++){
         CreateQuestionsPage.innerHTML += questionSection(i)
+        console.log(mainPage().innerHTML)
    }
    const allInfoInputs= document.querySelectorAll(`.question .inputInfos`)
    for(let x=0;x<allInfoInputs.length;x++){
@@ -408,273 +742,7 @@ function levelValidation(){
     }
     return true
 }
-function catchError(error){
-    alert("Ocorreu um erro! codigo "+error.response.status)
-}
-function requestRenderQuizzes(){
-    promisse = axios.get("https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes")
-    promisse.then(renderQuizzes)
-    promisse.catch(catchError)
-}
-function renderQuizzes(allQuizzes){
-    const otherQuizzesRenders=document.querySelector(".otherQuizzes")
-    const userQuizzesRenders=document.querySelector(".quizzByUser")
-    console.log(allQuizzes)
-    //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
-    const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
-    const userKeys=JSON.parse(localStorage.getItem("localQuizzKeyList"))
-    console.log(userIds)
-    if(userIds&&userIds.length>0){
-        const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
-            for(let x=0;x<userIds.length;x++){
-                if(currentQuizz.id===userIds[x]){
-                    return true        
-                }
-            }
-            return false;
-        })
-        
-        //checa se há há algum quizz do usuario
-        if(allUserQuizzes.length>0){
-            document.querySelector(".userEmptyQuizzes").classList.remove("active")
-            document.querySelector(".userAllQuizzes").classList.add("active")
-        }
-         //renderiza os quizzes do usuario
-        userQuizzesRenders.innerHTML=""
-        for(x=0;x<allUserQuizzes.length;x++){
-        const keyIndex =userIds.indexOf(allUserQuizzes[x].id);
-            console.log(allUserQuizzes[x].id + " , " + userKeys[keyIndex] + " [" + keyIndex)
-        userQuizzesRenders.innerHTML+=`
-        <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
-            <div onclick="startQuizz(${allUserQuizzes[x].id})">
-            <h2>${allUserQuizzes[x].title}</h2>
-                <div class="sideButtons">
-                    <div onclick="editQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="create-outline"></ion-icon></div>
-                    <div onclick="deleteQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="trash-outline"></ion-icon></div>
-                </div>
-            </div>
-        </li>`
-        }
-        
-    }
-    //interrompe o bubbling nos sideButtons
-    document.querySelectorAll(".sideButtons").forEach((element)=> element.addEventListener("click", stopEvent, false))
-    //renderiza os quizzes de todo mundo
-    let allOtherQuizzes = allQuizzes.data
-    console.log(allOtherQuizzes)
-    if(userIds&&userIds.length>0){
-        allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
-            for(x=0;x<userIds.length;x++){
-                if(userIds[x]===currentQuizz.id){
-
-                    return false;
-                }
-                else {
-                    console.log("deu diferente")
-                    return true;
-                } 
-            }
-        })
-    }
-    console.log(allOtherQuizzes)
-    otherQuizzesRenders.innerHTML="";
-    for(x=0;x<allOtherQuizzes.length;x++){
-    otherQuizzesRenders.innerHTML+=`
-<li class="quizz"  style="background-image: url('${allOtherQuizzes[x].image}');"> 
-    <div onclick="startQuizz(${allOtherQuizzes[x].id})">
-    <h2>${allOtherQuizzes[x].title}</h2>
-    </div>
-</li>`
-    }
-}
-function startQuizz(id){
-    const quizzToPlayPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`) //Tem que mudar o Id do final para saber qual é o quizz.
-    quizzToPlayPromisse.then(QuizzInfos)
-    quizzToPlayPromisse.catch()
-}
-let thenQuizz;
-const quizzPage = () => document.querySelector(`.quizzPage`)
-function QuizzInfos(quizz){
-    while(quizzPage().innerHTML === '\n    '){
-        createQuizz(quizz)
-        thenQuizz = quizz
-        return false
-    } 
-    return thenQuizz
-}
-let arrayEmbaralhada = []
-function createQuizz(quizz){
-    const quizzInfos = quizz.data
-    const quizzPage = document.querySelector(`.quizzPage`);//fazer as alteraçoes da tela 2
-    quizzPage.setAttribute("id", quizzInfos.id) // Dizer qual é o jogo
-    //Funcionando até
-    quizzPage.innerHTML += sectionQuizzHeader(quizzInfos) //Cria o Header
-    for(let i = 0; i < quizzInfos.questions.length; i++){
-        quizzPage.innerHTML += sectionQuizzQuestion() //Cria a Section da Questão
-        const section = document.querySelectorAll(`.quizzQuestion`)[i] //Pega a Questão
-        section.innerHTML = sectionQuizzQuestionContent(quizzInfos.questions[i]) //Criar o conteudo de cada Questão.
-        const alternatives = document.querySelectorAll(`.allAlternatives`)[i]//Pegar todas as alternativas
-        const answers = []
-        for(let j = 0; j < quizzInfos.questions[i].answers.length;j++){ //Pegar quantidade de perguntas, e poder embaralhar seus objetos(img e texto não!)
-            answers.push(quizzInfos.questions[i].answers[j])
-        }
-        answers.sort(comparador)
-        arrayEmbaralhada.push(answers)
-        for(let x = 0; x < answers.length; x++){
-            alternatives.innerHTML += liQuizzQuestionAlternatives(answers[x]);
-        }
-    }
-    main(0).classList.remove(`active`)
-    main(1).classList.add(`active`)
-    document.querySelector(`html`).scrollIntoView(true)
-}
-function comparador() { 
-	return Math.random() - 0.5; 
-}
-//Funções de criação do Quizz - Tela 2
-function sectionQuizzHeader(quizz){
-    return `
-    <section class="quizzPageHeader" style="background-image: url(${quizz.image});">
-        <h1>${quizz.title}</h1>
-    </section>
-    `
-}
-function sectionQuizzQuestion(){
-    return`
-    <section class="quizzQuestion quizzBox">
-    </section>
-    `
-}
-function sectionQuizzQuestionContent(question){
-    return `
-    <div class="quizzQuestionTitle" style="background-color: ${question.color};">
-        <h1 class="quizzTopTitle">${question.title}</h1>
-    </div>
-    <ul class="allAlternatives">
-    </ul>
-    `
-}
-function liQuizzQuestionAlternatives(answers){
-    return `
-    <li class="quizzAlternative" onclick="answeringQuestion(this)">
-        <div class="answerImg" style="background-image: url(${answers.image});"></div>
-        <h2>${answers.text}</h2>
-    </li>
-    `
-}
-//Função dos Onclicks -> Respondendo o Quizz!
-const allQuestion = () => document.querySelectorAll(`.quizzQuestion`)
-function answeringQuestion(element){
-    const alternatives = element.parentNode.querySelectorAll(`.quizzAlternative`)//Selecionar todas as alternativas da Questão
-    for(let i = 0; i < alternatives.length; i++){
-        alternatives[i].removeAttribute(`onclick`)//Não poder interagir novamente
-        if(alternatives[i] !== element){//Se for diferente do interagido, ganha opacity
-            alternatives[i].classList.add(`opacity`) 
-        }
-        const alternativesText = alternatives[i].querySelector(`h2`)//Pega o texto especifico
-        const isAnswerRight = arrayEmbaralhada[questionClick(element)]
-        if(isAnswerRight[i].isCorrectAnswer){//Se for true recebe a cor, caso contrario recebe a cor vermelha
-            alternativesText.classList.add(`rightAnswer`)
-        } else {
-            alternativesText.classList.add(`wrongAnswer`)
-        }
-        allQuestion()[questionClick(element)].classList.add(`answered`)
-    }
-    scrollTo()
-    //Se jogo finalizou
-    if(isQuizzFinished()){
-        const object = isQuizzFinished()
-        createQuizzResult(object.level, object.percentageByUser)
-        setTimeout(function(){document.querySelector(`.quizzResult`).scrollIntoView({behavior: "smooth"})}, 2000)
-    }
-}
-function questionClick(element){
-    const questionClicked = element.parentNode.parentNode;
-    for(let i = 0; i < allQuestion().length; i++){
-        if(allQuestion()[i] === questionClicked){
-            return i
-        }
-    }
-}
-function scrollTo(){
-    for(let i = 0; i < allQuestion().length; i++){
-        if(!allQuestion()[i].classList.contains(`answered`)){
-            if(i === 1){
-                return setTimeout(function (){allQuestion()[i].scrollIntoView({behavior: "smooth",})}, 2000)
-            }
-        }
-    }
-}
-function notAnswered(){
-    for(let i = 0; i < allQuestion().length;i++){
-        if(!allQuestion()[i].classList.contains(`answered`)){
-            return allQuestion[i]
-        }
-    }
-    return false
-}
-//Função para checar se o Quizz foi totalmente respondido!
-function isQuizzFinished(){
-    const AllLevels = QuizzInfos().data.levels
-    const amountOfQuestions = document.querySelectorAll(`.quizzQuestion`)
-    const allRightAnswers = document.querySelectorAll(`.rightAnswer`)
-    if(amountOfQuestions.length === allRightAnswers.length){//Para saber se o jogo acabou
-        console.log(AllLevels)
-        let rightAnswerByUser = 0 //Quantidade de Acertos!
-        for(let x = 0; x < allRightAnswers.length; x++){//Para saber se o usuario acertou ou não
-            if(allRightAnswers[x].parentNode.classList.contains(`opacity`)){//quer dizer que errou a questão, pois se ele acerta a reposta não ganha opacidade!
-            } else {
-                rightAnswerByUser++
-            }
-        }
-        const percentageByUser = ((rightAnswerByUser / allRightAnswers.length) * 100)
-        let zIndice;
-        for(let z = 0; z < AllLevels.length; z++){//Saber quantos niveis tem/saber qual o usuario se encaixa
-            if(AllLevels[z].minValue <= percentageByUser){
-                zIndice = z 
-            }
-        }
-        return {
-            level: AllLevels[zIndice],
-            percentageByUser: percentageByUser
-        }
-    }
-    return false
-}
-//Funções de Criação do Resultado do Quizz -> Tela-2
-function createQuizzResult(level, percentageByUser){
-    quizzPage().innerHTML += sectionQuizzResult();
-    const resultContent = document.querySelector(`.quizzResult .quizzBox`);
-    resultContent.innerHTML = quizzResultContent(level, percentageByUser);
-    document.querySelector(`.quizzResult`).classList.add(`active`);
-}
-function sectionQuizzResult(){
-    return `
-    <section class="quizzResult">
-            <div class="quizzBox">
-            </div>
-            <button class="restartQuizz btn" onclick="restartQuizz()">Reiniciar Quizz</button>
-            <button class="homeButton" onclick="homeButton()">Voltar Home</button>
-    </section>
-    `
-}
-function quizzResultContent(level, percentageByUser){
-    return `
-    <div class="quizzResultTitle">
-        <h1 class="quizzTopTitle">${percentageByUser.toFixed(0)}% de acerto: ${level.title}</h1>
-    </div>
-    <div class="resultDescription">
-        <img src="${level.image}" alt="">
-        <h2>${level.text}</h2>
-    </div>
-    `
-}
-function restartQuizz(){
-    const id = quizzPage().getAttributeNode("id").value
-    quizzPage().innerHTML = '\n    '
-    console.log(id)
-    startQuizz(id)
-}
+//Bonus
 function editQuizz(quizzId,quizzKey){
     console.log("isso vai para a tela de editar quizz")
     
@@ -707,3 +775,8 @@ function deleteFromLocalStorage(quizzId){
 function stopEvent(event) {
     event.stopPropagation();
 }
+/*Erros*/
+function catchError(error){
+    alert("Ocorreu um erro! codigo "+error.response.status)
+}
+

@@ -1,45 +1,44 @@
-.navContainer{
-    justify-content: left;
-}
 
 .mainpage{
     justify-content: left;
 }
 /*Desktop Width = (nDeQuizz x 340px) + ((nDeQuizz - 1) x 15px)*/
 /*esses mediaquery servem p sempre ter um espaço completo */
-    @media screen and (min-width: 1100px){
-        .userEmptyQuizzes,
-        .mainpage{
+    @media screen and (min-width: 1000px){
+        
+        .mainPageContainer{
             width:710px;
         }
     }
     @media screen and (min-width: 1400px){
-        .userEmptyQuizzes,
-        .mainpage{
+        .mainPageContainer{
             width:1065px;
         }
     }
     @media screen and (min-width: 1600px){
-        .userEmptyQuizzes,
-        .mainpage{
+        .mainPageContainer{
             width:1420px;
         }
     }
     @media screen and (min-width: 1900px){
-        .userEmptyQuizzes,
-        .mainpage{
+        .mainPageContainer{
             width: 1775px;
         }
     }
-    .mainpage ul{
+    .allQuizzes ul,
+    .otherQuizzes ul{
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: left;
     }
-        .mainpage li{
-            margin-right: 15px;
+        .allQuizzes li,
+        .otherQuizzes li{
+            margin: 7.5px;
         }
+    .allQuizzes h1{
+        padding: 0 7.5px;
+    }
 /*Tela 2*/
 
 .quizzPageImg{
