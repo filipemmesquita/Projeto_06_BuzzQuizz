@@ -72,9 +72,9 @@ function renderQuizzes(allQuizzes){
                     </div>
                 </div>
             </li>`
-        }
-        } else {
-            document.querySelector(`.userAllQuizzes`).remove()
+            } 
+        }else {
+            document.querySelector(`.userEmptyQuizzes`).remove()
         }
     }
     //interrompe o bubbling nos sideButtons
@@ -89,11 +89,8 @@ function renderQuizzes(allQuizzes){
 
                     return false;
                 }
-                else {
-                    console.log("deu diferente")
-                    return true;
-                } 
             }
+            return true;
         })
     }
     console.log(allOtherQuizzes)
@@ -316,10 +313,12 @@ function restartQuizz(){
 //Tela 3
 function quizzCreator(){
     cleanMainPage()
+    loadingScreen()
     //add os eventos de checagem dos campos aqui
     mainPage().innerHTML += quizzCreationHeader("Comece pelo começo")
     mainPage().innerHTML += quizzCreationAllInfosSection()
     eventCheck()
+    removeLoading()
 }
 function eventCheck(){
     const allInfoInputs= document.querySelectorAll(`.quizzCreationGeneralInfos .inputInfos`)
@@ -389,24 +388,27 @@ function quizzCreatorProceed(element){
     if(el === "proceedToQuestions"){
         if(infosValidation()){
             cleanMainPage()
+            loadingScreen()
             mainPage().innerHTML += quizzCreationHeader("Crie suas perguntas")
             mainPage().innerHTML += `
             <section class="quizzCreationQuestions">
             </section>
             `
             questionsGenerator(values)
-            console.log(mainPage().innerHTML)
+            removeLoading()
         }
     }
     if(el === "proceedToLevels"){
         if(questionsValidation()){
             cleanMainPage()
+            loadingScreen()
             mainPage().innerHTML += quizzCreationHeader("Agora, decida os níveis")
             mainPage().innerHTML += `
             <section class="quizzCreationLevels">
             </section>
             `
             levelsGenerator(values)
+            removeLoading()
         }
     }if(el === "proceedToFinish"){
         if(levelValidation()){
@@ -415,6 +417,7 @@ function quizzCreatorProceed(element){
             promisse.then(function(postResponse){
                 console.log(postResponse)
                 cleanMainPage()
+                loadingScreen()
                 updateLocalQuizzes(postResponse.data.id, postResponse.data.key)
                 mainPage().innerHTML += quizzCreationHeader("Seu quizz está pronto!")
                 mainPage().innerHTML += `
@@ -426,6 +429,7 @@ function quizzCreatorProceed(element){
                 globalCreatedQuizz.image=""
                 globalCreatedQuizz.questions.length=0
                 globalCreatedQuizz.levels.length=0
+                removeLoading()
             })
             promisse.catch(catchError)
         }
@@ -490,7 +494,6 @@ function questionsGenerator(infos){
    let CreateQuestionsPage = document.querySelector(`.quizzCreationQuestions`)
    for(let i = 1; i < infos.questionamount + 1; i++){
         CreateQuestionsPage.innerHTML += questionSection(i)
-        console.log(mainPage().innerHTML)
    }
    const allInfoInputs= document.querySelectorAll(`.question .inputInfos`)
    for(let x=0;x<allInfoInputs.length;x++){
@@ -709,9 +712,13 @@ function levelsGenerator(infos){
         </div>
         <div class="quizzCreationInfos">
             <input class="inputInfos" type="text" placeholder="Título do nível">
+            <h3></h3>
             <input class="inputInfos" type="text" placeholder="% de acerto mínima">
+            <h3></h3>
             <input class="inputInfos" type="text" placeholder="URL da imagem do nível">
+            <h3></h3>
             <input class="inputInfos description" type="text" placeholder="Descrição do nível">
+            <h3></h3>
         </div>
     </section>
     `
@@ -724,14 +731,15 @@ function levelValidation(){
         const levelPercentage = Number(AllLevelInputs[1].value)
         const levelURL = AllLevelInputs[2].value
         const levelDescription = AllLevelInputs[3].value
+        //.classList.add(`.inputWrongValue`)
         if(levelTitle.length < 10){
-            return false
+            levelTitle.classList.add(`.inputWrongValue`)
         }if(levelPercentage < 0 || levelPercentage > 100){
-            return false
+            levelPercentage.style.background = "#FFE9E9";
         }if(levelURL.substring(0,8)!=="https://"){
-            return false
+            levelURL.style.background = "#FFE9E9";
         }if(levelDescription.length < 30){
-            return false
+            levelDescription.style.background = "#FFE9E9";
         }
         globalCreatedQuizz.levels.push({
             title: levelTitle,
@@ -743,10 +751,6 @@ function levelValidation(){
     return true
 }
 //Bonus
-function editQuizz(quizzId,quizzKey){
-    console.log("isso vai para a tela de editar quizz")
-    
-}
 function deleteQuizz(quizzId,quizzKey){
     if (confirm("Tem certeza que deseja deletar este quizz?") == true){
         const config = {
@@ -777,6 +781,8 @@ function stopEvent(event) {
 }
 /*Erros*/
 function catchError(error){
+    loadingScreen()
     alert("Ocorreu um erro! codigo "+error.response.status)
+    removeLoading()
 }
 

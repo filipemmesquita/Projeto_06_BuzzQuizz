@@ -25,13 +25,14 @@
             width: 1775px;
         }
     }
+    .userAllQuizzes ul,
     .allQuizzes ul,
     .otherQuizzes ul{
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: left;
-    }
+    }   .userAllQuizzes li,
         .allQuizzes li,
         .otherQuizzes li{
             margin: 7.5px;

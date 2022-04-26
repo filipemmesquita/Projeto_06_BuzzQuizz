@@ -12,7 +12,6 @@ main h1{
     line-height: 23px;
     color: #000000;
 }
-
 /*Header*/
 .topBar{
     width: 100%;
@@ -257,6 +256,7 @@ main h1{
 /*Layout dos Quizz*/
 .quizz{ /*li -> quizz*/
     margin-top: 14px; /*Para mobile*/
+    width: 340px;
     position: relative;
     justify-content: center;
     background-size:cover;
@@ -308,7 +308,9 @@ main h1{
         border: 1px solid #D1D1D1;
         box-sizing: border-box;
         border-radius: 5px;
-    }
+    }   .inputWrongValue{
+            background: #FFE9E9;
+        }
         .inputinfos::placeholder{
             font-style: italic;
             font-weight: 400;
