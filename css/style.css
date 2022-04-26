@@ -385,7 +385,8 @@ main h1{
         margin-bottom: 0px;
     }/*Não interferir no Padding da do Butão*/
     .generalInfos input,
-    .level input{
+    .level input,
+    textarea{
         margin: 7.5px 0;
     }   .generalInfos input:first-of-type{
             margin-top: 0px;
@@ -394,7 +395,7 @@ main h1{
             margin-top: 15px;
         } /*Margin Correta para o primeiro input*/
         .generalInfos input:last-of-type,
-        .level input:last-of-type{
+        .level textarea{
             margin-bottom: 0px;
         } /*Não interferir no Padding da Box*/
     /*Section Finish*/
