@@ -12,6 +12,11 @@ main h1{
     line-height: 23px;
     color: #000000;
 }
+.sideButtons > div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 /*Header*/
 .topBar{
     width: 100%;

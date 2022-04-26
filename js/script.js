@@ -43,7 +43,6 @@ function renderQuizzes(allQuizzes){
     //esse filtro tem que ser atualizado para conter um for comparando a um array de ids
     const userIds=JSON.parse(localStorage.getItem("localQuizzList"))
     const userKeys=JSON.parse(localStorage.getItem("localQuizzKeyList"))
-    console.log(userIds)
     if(userIds&&userIds.length>0){
         const allUserQuizzes =allQuizzes.data.filter(function(currentQuizz){
             for(let x=0;x<userIds.length;x++){
@@ -53,32 +52,15 @@ function renderQuizzes(allQuizzes){
             }
             return false;
         })
-        
-        //checa se há há algum quizz do usuario
-        if(allUserQuizzes.length>0){
-            document.querySelector(`.userEmptyQuizzes`).remove()
-            //renderiza os quizzes do usuario
-            userQuizzesRenders.innerHTML=""
-            for(x=0;x<allUserQuizzes.length;x++){
-            const keyIndex =userIds.indexOf(allUserQuizzes[x].id);
-                console.log(allUserQuizzes[x].id + " , " + userKeys[keyIndex] + " [" + keyIndex)
-            userQuizzesRenders.innerHTML+=`
-            <li class="quizz" style="background-image: url('${allUserQuizzes[x].image}');"> 
-                <div onclick="startQuizz(${allUserQuizzes[x].id})">
-                <h2>${allUserQuizzes[x].title}</h2>
-                    <div class="sideButtons">
-                        <div onclick="editQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="create-outline"></ion-icon></div>
-                        <div onclick="deleteQuizz(${allUserQuizzes[x].id}, '${userKeys[keyIndex]}')"><ion-icon name="trash-outline"></ion-icon></div>
-                    </div>
-                </div>
-            </li>`
-            } 
-        }else {
-            document.querySelector(`.userEmptyQuizzes`).remove()
-        }
     }
-    //interrompe o bubbling nos sideButtons
-    document.querySelectorAll(".sideButtons").forEach((element)=> element.addEventListener("click", stopEvent, false))
+    if(localStorage.length>0){
+        console.log(`Oi`)
+        loadingUserQuizzes(userIds, userKeys)
+        document.querySelector(`.userEmptyQuizzes`).remove()
+    } else{
+        console.log(`Coé`)
+        document.querySelector(`.userAllQuizzes`).remove()
+    }
     //renderiza os quizzes de todo mundo
     let allOtherQuizzes = allQuizzes.data
     console.log(allOtherQuizzes)
@@ -107,7 +89,33 @@ function renderQuizzes(allQuizzes){
         document.querySelector(`userEmptyQuizzes`).remove()
     }
     removeLoading()
-}   
+}
+function loadingUserQuizzes(userIds, userKeys){
+    const userQuizzesRenders=document.querySelector(".quizzByUser")
+    for(let i = 0; i < userIds.length;i++){
+        const userQuizzesPromisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${userIds[i]}`)
+        userQuizzesPromisse.then(function(response){
+            const allUserQuizzes = response.data
+            userQuizzesRenders.innerHTML+=`
+                <li class="quizz" style="background-image: url('${allUserQuizzes.image}');"> 
+                    <div onclick="startQuizz(${allUserQuizzes.id})">
+                    <h2>${allUserQuizzes.title}</h2>
+                        <div class="sideButtons">
+                        <div class="sideB" onclick="editQuizz(${allUserQuizzes.id}, '${userKeys[i]}')"><ion-icon name="create-outline"></ion-icon></div>
+                        <div class="sideB" onclick="deleteQuizz(${allUserQuizzes.id}, '${userKeys[i]}')"><ion-icon name="trash-outline"></ion-icon></div>
+                        </div>
+                    </div>
+                </li>`
+            //bubbling
+            const allSideB = document.querySelectorAll(".sideButtons")
+            allSideB.forEach((element) => element.addEventListener("click", stopEvent, false))
+        })
+        
+    }
+
+}
+
+
 function userEmptyQuizzesSection(){
     return `
     <section class="userEmptyQuizzes">
@@ -833,25 +841,25 @@ function levelValidation(){
     for(let i = 0; i < AllLevels.length; i++){
         const AllLevelInputs = AllLevels[i].querySelectorAll(`.inputInfos`)
         const levelTitle = AllLevelInputs[0].value
-        const levelPercentage = Number(AllLevelInputs[1].value)
-        const levelURL = AllLevelInputs[2].value
+        const levelURL = AllLevelInputs[1].value
+        const levelPercentage = Number(AllLevelInputs[2].value)
         const levelDescription = AllLevelInputs[3].value
         //.classList.add(`.inputWrongValue`)
         if(levelTitle.length < 10){
-            levelTitle.classList.add(`.inputWrongValue`)
-        }if(levelPercentage < 0 || levelPercentage > 100){
+            console.log(`false title`)
             return false
-        }else{
-            allLevelsPercentages[i]=parseInt(AllLevelInputs[1].value)
+        }if(levelPercentage < 0 || levelPercentage > 100){
+            console.log(`levelpercentage`)
+            return false
         }
         if(levelURL.substring(0,8)!=="https://"){
+            console.log(`levelpercentage`)
             return false
         }if(levelDescription.length < 30){
-            levelDescription.style.background = "#FFE9E9";
-        }
-        if(!allLevelsPercentages.includes(0)){
+            console.log(`levelDescription`)
             return false
         }
+
         globalCreatedQuizz.levels.push({
             title: levelTitle,
             image:  levelURL,
@@ -859,12 +867,14 @@ function levelValidation(){
             minValue: levelPercentage,
         })
     }
+    console.log(`Foi`)
     return true
 }
 //Bonus
 const getEditPromisse = (quizzId) => promisse = axios.get(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${quizzId}`);
 function editQuizz(quizzId,quizzKey){
     getEditPromisse(quizzId)
+    mainPage().classList.add(quizzKey)
     promisse.then(editInfosQuizz);
 }
 function editInfosQuizz(response){
@@ -884,6 +894,7 @@ function editProceedBtn(element){
     if(el === "proceedToQuestions"){
         if(infosValidation()){
             cleanMainPage()
+            console.log(globalCreatedQuizz)
             loadingScreen()
             mainPage().innerHTML += quizzCreationHeader("Edite suas perguntas")
             mainPage().innerHTML += `
@@ -900,6 +911,7 @@ function editProceedBtn(element){
     if(el === "proceedToLevels"){
         if(questionsValidation()){
             cleanMainPage()
+            console.log(globalCreatedQuizz)
             loadingScreen()
             mainPage().innerHTML += quizzCreationHeader("Agora, edite seus níveis")
             mainPage().innerHTML += `
@@ -910,29 +922,42 @@ function editProceedBtn(element){
             getEditPromisse(id)
             promisse.then(callBackLevels)
             document.querySelector(`.proceedToFinish`).setAttribute("onclick","editProceedBtn(this)")
+            console.log(mainPage().classList[1])
             removeLoading()
         }
     }
     if(el === "proceedToFinish"){
-        console.log(globalCreatedQuizz)
-        const editpromisse = axios.put(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`, globalCreatedQuizz);
-        editpromisse.then(function(postResponse){
-            cleanMainPage()
-            loadingScreen()
-            updateLocalQuizzes(postResponse.data.id, postRespose.data.key)
-            mainPage().innerHTML += quizzCreationHeader("Seu quizz foi editado com sucesso!")
-            mainPage().innerHTML += `
-            <section class="quizzCreationFinish">
-            </section>
-            `
-            renderQuizzCreationFinish(postResponse.data.id)
-            globalCreatedQuizz.title=""
-            globalCreatedQuizz.image=""
-            globalCreatedQuizz.questions.length=0
-            globalCreatedQuizz.levels.length=0
-            removeLoading()
-        })
-        editpromisse.catch(catchError)
+        console.log(`Oi`)
+        if(levelValidation()){
+            console.log(`Oi`)
+            console.log(globalCreatedQuizz)
+            const config = {
+                headers:{
+                  "Secret-Key": mainPage().classList[1]
+                }
+            }
+            const editpromisse = axios.put(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`,globalCreatedQuizz, config);
+            editpromisse.then(function(){
+                cleanMainPage()
+                loadingScreen()
+                updateLocalQuizzes(id, mainPage().classList[1])
+                mainPage().innerHTML += quizzCreationHeader("Seu quizz foi editado com sucesso!")
+                mainPage().innerHTML += `
+                <section class="quizzCreationFinish">
+                </section>
+                `
+                renderQuizzCreationFinish(postResponse.data.id)
+                globalCreatedQuizz.title=""
+                globalCreatedQuizz.image=""
+                globalCreatedQuizz.questions.length=0
+                globalCreatedQuizz.levels.length=0
+                removeLoading()
+            })
+            editpromisse.catch(catchError)
+    
+        } else {
+            console.log(`AlgoErrado`)
+        }
     }
 }
 function callBackInfos(response){
