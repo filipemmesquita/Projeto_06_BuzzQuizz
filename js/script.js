@@ -333,27 +333,35 @@ function infosValidationEvent(inputInfo){
     const levelsAmount = Number(allInfoInputs[3].value)
     if(quizzTitle.length < 20 || quizzTitle.length > 65){
         allInfoWarnings[0].innerText="O título deve ter pelo menos 20 caracteres"
+        allInfoInputs[0].classList.add("invalid")
     }
     else{
         allInfoWarnings[0].innerText=""
+        allInfoInputs[0].classList.remove("invalid")
     }
     if(imageUrl.substring(0,8)!=="https://"){
         allInfoWarnings[1].innerText="A URL precisa ser válida!"
+        allInfoInputs[1].classList.add("invalid")
     }
     else{
         allInfoWarnings[1].innerText=""
+        allInfoInputs[1].classList.remove("invalid")
     }
     if(questionAmount < 3){
         allInfoWarnings[2].innerText="O quizz deve ter no mínimo 3 perguntas"
+        allInfoInputs[2].classList.add("invalid")
     }
     else{
         allInfoWarnings[2].innerText=""
+        allInfoInputs[2].classList.remove("invalid")
     }
     if(levelsAmount < 2){
         allInfoWarnings[3].innerText="O quizz deve ter no mínimo 2 níveis"
+        allInfoInputs[3].classList.add("invalid")
     }
     else{
         allInfoWarnings[3].innerText=""
+        allInfoInputs[3].classList.remove("invalid")
     }
 
 }
@@ -661,28 +669,36 @@ function questionsValidationEvent(inputInfo){
         let wrongAnswerAmount=0;
         if(questionTitle.querySelectorAll(".inputInfos")[0].value.length < 20 ){
             questionTitle.querySelectorAll("h3")[0].textContent="O texto da pergunta deve ser maior que 20 caracteres"
+            questionTitle.querySelectorAll(".inputInfos")[0].classList.add("invalid")
         }
         else{
             questionTitle.querySelectorAll("h3")[0].textContent=""
+            questionTitle.querySelectorAll(".inputInfos")[0].classList.remove("invalid")
         }
         if(!isHexColor(questionTitle.querySelectorAll(".inputInfos")[1].value)){
            questionTitle.querySelectorAll("h3")[1].innerText="A cor precisa ser valida no formato RGB hexadecimal!"
+           questionTitle.querySelectorAll(".inputInfos")[1].classList.add("invalid")
         }
         else{
             questionTitle.querySelectorAll("h3")[1].textContent=""
+           questionTitle.querySelectorAll(".inputInfos")[1].classList.remove("invalid")
         }
         if(rightAnswer.querySelectorAll(".inputInfos")[0].value==""){
             rightAnswer.querySelectorAll("h3")[0].textContent="É necessario ao menos uma resposta correta!"
+            rightAnswer.querySelectorAll(".inputInfos")[0].classList.add("invalid")
         }
         else{
             rightAnswer.querySelectorAll("h3")[0].textContent=""
+            rightAnswer.querySelectorAll(".inputInfos")[0].classList.remove("invalid")
         }
         if(rightAnswer.querySelectorAll(".inputInfos")[0].value!=="" ){
             if(rightAnswer.querySelectorAll(".inputInfos")[1].value.substring(0,8)!=="https://"){
                 rightAnswer.querySelectorAll("h3")[1].innerText="Preencha uma URL válida!"
+                rightAnswer.querySelectorAll(".inputInfos")[1].classList.add("invalid")
             }
             else{
                 rightAnswer.querySelectorAll("h3")[1].innerText=""
+                rightAnswer.querySelectorAll(".inputInfos")[1].classList.remove("invalid")
             }
         }
         for(let x=2;x<allQuestionInput.length;x++){
@@ -692,16 +708,22 @@ function questionsValidationEvent(inputInfo){
             console.log(currentWarningsChecked)
             if(x===2&&currentQuestionChecked[0].value===""){
                 currentWarningsChecked[0].innerText="É necessário pelo menos uma resposta errada!"
+                currentQuestionChecked[0].classList.add("invalid")
             }
             else{
                 currentWarningsChecked[0].innerText=""
+                currentQuestionChecked[0].classList.remove("invalid")
+
             }
             if(currentQuestionChecked[0].value!=="" ){
                 if(currentQuestionChecked[1].value.substring(0,8)!=="https://"){
                     currentWarningsChecked[1].innerText="Preencha uma URL válida!"
+                    currentQuestionChecked[1].classList.add("invalid")
                 }
                 else{
                     currentWarningsChecked[1].innerText=""
+                    currentQuestionChecked[1].classList.remove("invalid")
+
                 }
             }
         }
@@ -739,35 +761,43 @@ function levelsGenerator(infos){
         const warningDescription = AllLevelWarnings[3]
         if(levelTitle.length < 10){
             warningTitle.innerText="É necessário ao menos 10 caracteres!"
+            AllLevelInputs[0].classList.add("invalid")
         }
         else{
             warningTitle.innerText=""
+            AllLevelInputs[0].classList.remove("invalid")
         }
         if(Number(levelPercentage) < 0 || Number(levelPercentage) > 100){
             warningPercentage.innerText = "Insira um valor igual ou maior que zero e menor que 100!"
+            AllLevelInputs[1].classList.add("invalid")
         }
         else{
             warningPercentage.innerText = ""
             allLevelsPercentages[i]=parseInt(AllLevelInputs[1].value)
+            AllLevelInputs[1].classList.remove("invalid")
         }
         if(levelURL.substring(0,8)!=="https://"){
             warningURL.innerText="Insira uma URL válida!"
+            AllLevelInputs[2].classList.add("invalid")
         } 
         else{
             warningURL.innerText=""
-
+            AllLevelInputs[2].classList.remove("invalid")
         }
         if(levelDescription.length < 30){
             warningDescription.innerText = "A descrição precisa ter ao menos 30 caracteres!"
+            AllLevelInputs[3].classList.add("invalid")
         }
         else{
             warningDescription.innerText = "A descrição precisa ter ao menos 30 caracteres!"
+            AllLevelInputs[3].classList.remove("invalid")
         }
     }
     console.log(allLevelsPercentages);
     if(!allLevelsPercentages.includes(0)){
         for(let x =0; x<allLevels.length;x++){
             allLevels[x].querySelectorAll("h3")[1].innerText="Pelo menos um nível precisa ser a partir de 0% acertos!"
+            allLevels[x].querySelectorAll(".inputInfos")[1].classList.add("invalid")
         }
     }
 }
