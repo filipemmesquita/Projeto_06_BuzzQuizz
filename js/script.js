@@ -84,16 +84,13 @@ function renderQuizzes(allQuizzes){
     console.log(allOtherQuizzes)
     if(userIds&&userIds.length>0){
         allOtherQuizzes = allQuizzes.data.filter(function(currentQuizz){
-            for(x=0;x<userIds.length;x++){
+            
+            for(let x=0;x<userIds.length;x++){
                 if(userIds[x]===currentQuizz.id){
-
                     return false;
                 }
-                else {
-                    console.log("deu diferente")
-                    return true;
-                } 
             }
+            return true;
         })
     }
     console.log(allOtherQuizzes)
@@ -492,14 +489,14 @@ function questionsGenerator(infos){
         CreateQuestionsPage.innerHTML += questionSection(i)
         console.log(mainPage().innerHTML)
    }
-   const allInfoInputs= document.querySelectorAll(`.question .inputInfos`)
-   for(let x=0;x<allInfoInputs.length;x++){
-       allInfoInputs[x].addEventListener('input', questionsValidationEvent)
-       allInfoInputs[x].classList.add("teste")
-   }
+
    CreateQuestionsPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
    CreateQuestionsPage.querySelector(`.open-icon`).classList.toggle(`active`)
    CreateQuestionsPage.innerHTML += `<button class="proceedToLevels btn" onclick="quizzCreatorProceed(this)">Prosseguir para criar níveis</button>`
+   const allInfoInputs= document.querySelectorAll(`.question .inputInfos`)
+   for(let x=0;x<allInfoInputs.length;x++){
+       allInfoInputs[x].addEventListener('input', questionsValidationEvent)
+   }
 }
 function questionSection(i){
     return `
@@ -575,7 +572,6 @@ function descriptionToggle(element){
 }
 function isHexColor(str){
     const validChars=["1","2","3","4","5","6","7","8","9","0","a","b","c","d","e","f","A","B","C","D","E","F"];
-    console.log("testando" +str)
     if(str.substring(0,1)!=="#" && str.length!==7){
         console.log(" # ou length deu ruim")
         return false
@@ -657,33 +653,56 @@ function questionsValidation(){
     return true
 }
 function questionsValidationEvent(inputInfo){
-    console.log("evento chamado")
     const allQuestion= document.querySelectorAll(".question");
     for(let y=0;y<allQuestion.length;y++){
         const allQuestionInput = allQuestion[y].querySelectorAll(`.quizzCreationInputBox`)
         const questionTitle = allQuestionInput[0]
+        const rightAnswer = allQuestionInput[1]
         let wrongAnswerAmount=0;
-        console.log(questionTitle)
         if(questionTitle.querySelectorAll(".inputInfos")[0].value.length < 20 ){
-            questionTitle.querySelector("h3")[0].innerText="O texto da pergunta deve ser maior que 20 caracteres"
+            questionTitle.querySelectorAll("h3")[0].textContent="O texto da pergunta deve ser maior que 20 caracteres"
+        }
+        else{
+            questionTitle.querySelectorAll("h3")[0].textContent=""
         }
         if(!isHexColor(questionTitle.querySelectorAll(".inputInfos")[1].value)){
-           questionTitle.querySelector("h3")[0].innerText="A cor precisa ser valida no formato RGB hexadecimal!"
+           questionTitle.querySelectorAll("h3")[1].innerText="A cor precisa ser valida no formato RGB hexadecimal!"
         }
-        for(let x=1;x<allQuestionInput.length;x++){
+        else{
+            questionTitle.querySelectorAll("h3")[1].textContent=""
+        }
+        if(rightAnswer.querySelectorAll(".inputInfos")[0].value==""){
+            rightAnswer.querySelectorAll("h3")[0].textContent="É necessario ao menos uma resposta correta!"
+        }
+        else{
+            rightAnswer.querySelectorAll("h3")[0].textContent=""
+        }
+        if(rightAnswer.querySelectorAll(".inputInfos")[0].value!=="" ){
+            if(rightAnswer.querySelectorAll(".inputInfos")[1].value.substring(0,8)!=="https://"){
+                rightAnswer.querySelectorAll("h3")[1].innerText="Preencha uma URL válida!"
+            }
+            else{
+                rightAnswer.querySelectorAll("h3")[1].innerText=""
+            }
+        }
+        for(let x=2;x<allQuestionInput.length;x++){
             const currentQuestionChecked = allQuestionInput[x].querySelectorAll(".inputInfos")
             const currentWarningsChecked = allQuestionInput[x].querySelectorAll("h3")
-            if(x===1&&currentQuestionChecked[0].value===""){
-                questionTitle.querySelector("h3")[0].innerText="É necessário uma resposta correta!"
-            }
+            console.log(currentQuestionChecked)
+            console.log(currentWarningsChecked)
             if(x===2&&currentQuestionChecked[0].value===""){
-                questionTitle.querySelector("h3")[0].innerText="É necessário pelo menos uma resposta errada!"
+                currentWarningsChecked[0].innerText="É necessário pelo menos uma resposta errada!"
+            }
+            else{
+                currentWarningsChecked[0].innerText=""
             }
             if(currentQuestionChecked[0].value!=="" ){
                 if(currentQuestionChecked[1].value.substring(0,8)!=="https://"){
-                    questionTitle.querySelector("h3")[1].innerText="Preencha uma URL válida!"
+                    currentWarningsChecked[1].innerText="Preencha uma URL válida!"
                 }
-
+                else{
+                    currentWarningsChecked[1].innerText=""
+                }
             }
         }
     }
@@ -699,7 +718,59 @@ function levelsGenerator(infos){
     CreateLevelPage.querySelector(`.quizzCreationInfos`).classList.add(`active`)
     CreateLevelPage.querySelector(`.open-icon`).classList.toggle(`active`)
     CreateLevelPage.innerHTML += `<button class="proceedToFinish btn" onclick="quizzCreatorProceed(this)">Finalizar Quizz</button>`
+    const allLevelInputs= document.querySelectorAll(`.quizzCreationLevels .inputInfos`)
+    for(let x=0;x<allLevelInputs.length;x++){
+        allLevelInputs[x].addEventListener('input', levelsValidationEvent)
+    }
  }
+ function levelsValidationEvent(){
+    const allLevels = document.querySelectorAll(`.level`)
+    const allLevelsPercentages = [];
+    for(let i = 0; i < allLevels.length; i++){
+        const AllLevelInputs = allLevels[i].querySelectorAll(`.inputInfos`)
+        const AllLevelWarnings=allLevels[i].querySelectorAll("h3")
+        const levelTitle = AllLevelInputs[0].value
+        const warningTitle = AllLevelWarnings[0];
+        const levelPercentage = AllLevelInputs[1].value
+        const warningPercentage = AllLevelWarnings[1]
+        const levelURL = AllLevelInputs[2].value
+        const warningURL=AllLevelWarnings[2]
+        const levelDescription = AllLevelInputs[3].value
+        const warningDescription = AllLevelWarnings[3]
+        if(levelTitle.length < 10){
+            warningTitle.innerText="É necessário ao menos 10 caracteres!"
+        }
+        else{
+            warningTitle.innerText=""
+        }
+        if(Number(levelPercentage) < 0 || Number(levelPercentage) > 100){
+            warningPercentage.innerText = "Insira um valor igual ou maior que zero e menor que 100!"
+        }
+        else{
+            warningPercentage.innerText = ""
+            allLevelsPercentages[i]=parseInt(AllLevelInputs[1].value)
+        }
+        if(levelURL.substring(0,8)!=="https://"){
+            warningURL.innerText="Insira uma URL válida!"
+        } 
+        else{
+            warningURL.innerText=""
+
+        }
+        if(levelDescription.length < 30){
+            warningDescription.innerText = "A descrição precisa ter ao menos 30 caracteres!"
+        }
+        else{
+            warningDescription.innerText = "A descrição precisa ter ao menos 30 caracteres!"
+        }
+    }
+    console.log(allLevelsPercentages);
+    if(!allLevelsPercentages.includes(0)){
+        for(let x =0; x<allLevels.length;x++){
+            allLevels[x].querySelectorAll("h3")[1].innerText="Pelo menos um nível precisa ser a partir de 0% acertos!"
+        }
+    }
+}
  function levelSection(i){
     return `
     <section class="level box">
@@ -709,15 +780,20 @@ function levelsGenerator(infos){
         </div>
         <div class="quizzCreationInfos">
             <input class="inputInfos" type="text" placeholder="Título do nível">
+            <h3></h3>
             <input class="inputInfos" type="text" placeholder="% de acerto mínima">
+            <h3></h3>
             <input class="inputInfos" type="text" placeholder="URL da imagem do nível">
+            <h3></h3>
             <input class="inputInfos description" type="text" placeholder="Descrição do nível">
+            <h3></h3>
         </div>
     </section>
     `
 }
 function levelValidation(){
     const AllLevels = document.querySelectorAll(`.level`)
+    const allLevelsPercentages = [];
     for(let i = 0; i < AllLevels.length; i++){
         const AllLevelInputs = AllLevels[i].querySelectorAll(`.inputInfos`)
         const levelTitle = AllLevelInputs[0].value
@@ -728,9 +804,15 @@ function levelValidation(){
             return false
         }if(levelPercentage < 0 || levelPercentage > 100){
             return false
-        }if(levelURL.substring(0,8)!=="https://"){
+        }else{
+            allLevelsPercentages[i]=parseInt(AllLevelInputs[1].value)
+        }
+        if(levelURL.substring(0,8)!=="https://"){
             return false
         }if(levelDescription.length < 30){
+            return false
+        }
+        if(!allLevelsPercentages.includes(0)){
             return false
         }
         globalCreatedQuizz.levels.push({

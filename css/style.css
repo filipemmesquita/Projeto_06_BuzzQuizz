@@ -256,6 +256,7 @@ main h1{
             }
 /*Layout dos Quizz*/
 .quizz{ /*li -> quizz*/
+    width:340px;
     margin-top: 14px; /*Para mobile*/
     position: relative;
     justify-content: center;
