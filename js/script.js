@@ -74,7 +74,7 @@ function renderQuizzes(allQuizzes){
             </li>`
             } 
         }else {
-            document.querySelector(`.userEmptyQuizzes`).remove()
+            document.querySelector(`.userAllQuizzes`).remove()
         }
     }
     //interrompe o bubbling nos sideButtons
@@ -795,7 +795,7 @@ function levelsGenerator(infos){
             AllLevelInputs[3].classList.add("invalid")
         }
         else{
-            warningDescription.innerText = "A descrição precisa ter ao menos 30 caracteres!"
+            warningDescription.innerText = ""
             AllLevelInputs[3].classList.remove("invalid")
         }
     }
@@ -821,7 +821,7 @@ function levelsGenerator(infos){
             <h3></h3>
             <input class="inputInfos" type="text" placeholder="URL da imagem do nível">
             <h3></h3>
-            <input class="inputInfos description" type="text" placeholder="Descrição do nível">
+            <textarea class="inputInfos description" placeholder="Descrição do nível"></textarea>
             <h3></h3>
         </div>
     </section>
