@@ -330,6 +330,7 @@ main h1{
             flex-direction: column;
         }   /*Input Especifico do Level*/
             .description{
+                padding: 14px;
                 height: 177px;
             }
             .description::placeholder{
