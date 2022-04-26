@@ -841,8 +841,8 @@ function levelValidation(){
     for(let i = 0; i < AllLevels.length; i++){
         const AllLevelInputs = AllLevels[i].querySelectorAll(`.inputInfos`)
         const levelTitle = AllLevelInputs[0].value
-        const levelURL = AllLevelInputs[1].value
-        const levelPercentage = Number(AllLevelInputs[2].value)
+        const levelPercentage = Number(AllLevelInputs[1].value)
+        const levelURL = AllLevelInputs[2].value
         const levelDescription = AllLevelInputs[3].value
         //.classList.add(`.inputWrongValue`)
         if(levelTitle.length < 10){
@@ -940,13 +940,12 @@ function editProceedBtn(element){
             editpromisse.then(function(){
                 cleanMainPage()
                 loadingScreen()
-                updateLocalQuizzes(id, mainPage().classList[1])
                 mainPage().innerHTML += quizzCreationHeader("Seu quizz foi editado com sucesso!")
                 mainPage().innerHTML += `
                 <section class="quizzCreationFinish">
                 </section>
                 `
-                renderQuizzCreationFinish(postResponse.data.id)
+                renderQuizzCreationFinish(id)
                 globalCreatedQuizz.title=""
                 globalCreatedQuizz.image=""
                 globalCreatedQuizz.questions.length=0
@@ -995,8 +994,8 @@ function callBackLevels(response){
     for(let i = 0; i < allLevels.length; i++){
         const allInputs = allLevels[i].querySelectorAll(`.inputInfos`);
         allInputs[0].value = levels[i].title
-        allInputs[1].value = levels[i].image
-        allInputs[2].value = Number(levels[i].minValue)
+        allInputs[1].value = Number(levels[i].minValue)
+        allInputs[2].value = levels[i].image
         allInputs[3].value = levels[i].text
     }
 }
