@@ -339,9 +339,11 @@ function infosValidationEvent(inputInfo){
     const imageUrl = allInfoInputs[1].value
     const questionAmount = Number(allInfoInputs[2].value)
     const levelsAmount = Number(allInfoInputs[3].value)
+    let isValid = true
     if(quizzTitle.length < 20 || quizzTitle.length > 65){
         allInfoWarnings[0].innerText="O título deve ter pelo menos 20 caracteres"
         allInfoInputs[0].classList.add("invalid")
+        isValid=false
     }
     else{
         allInfoWarnings[0].innerText=""
@@ -350,6 +352,7 @@ function infosValidationEvent(inputInfo){
     if(imageUrl.substring(0,8)!=="https://"){
         allInfoWarnings[1].innerText="A URL precisa ser válida!"
         allInfoInputs[1].classList.add("invalid")
+        isValid=false
     }
     else{
         allInfoWarnings[1].innerText=""
@@ -358,6 +361,7 @@ function infosValidationEvent(inputInfo){
     if(questionAmount < 3){
         allInfoWarnings[2].innerText="O quizz deve ter no mínimo 3 perguntas"
         allInfoInputs[2].classList.add("invalid")
+        isValid=false
     }
     else{
         allInfoWarnings[2].innerText=""
@@ -366,10 +370,18 @@ function infosValidationEvent(inputInfo){
     if(levelsAmount < 2){
         allInfoWarnings[3].innerText="O quizz deve ter no mínimo 2 níveis"
         allInfoInputs[3].classList.add("invalid")
+        isValid=false
     }
     else{
         allInfoWarnings[3].innerText=""
         allInfoInputs[3].classList.remove("invalid")
+    }
+    const button =document.querySelector("button");
+    if(isValid){
+        button.setAttribute("class","proceedToQuestions btn")
+    }
+    if(!isValid){
+        button.setAttribute("class","proceedToQuestions btn disabled")
     }
 
 }
@@ -678,10 +690,11 @@ function questionsValidationEvent(inputInfo){
         const allQuestionInput = allQuestion[y].querySelectorAll(`.quizzCreationInputBox`)
         const questionTitle = allQuestionInput[0]
         const rightAnswer = allQuestionInput[1]
-        let wrongAnswerAmount=0;
+        let isValid=true;
         if(questionTitle.querySelectorAll(".inputInfos")[0].value.length < 20 ){
             questionTitle.querySelectorAll("h3")[0].textContent="O texto da pergunta deve ser maior que 20 caracteres"
             questionTitle.querySelectorAll(".inputInfos")[0].classList.add("invalid")
+            isValid=false;
         }
         else{
             questionTitle.querySelectorAll("h3")[0].textContent=""
@@ -690,6 +703,7 @@ function questionsValidationEvent(inputInfo){
         if(!isHexColor(questionTitle.querySelectorAll(".inputInfos")[1].value)){
            questionTitle.querySelectorAll("h3")[1].innerText="A cor precisa ser valida no formato RGB hexadecimal!"
            questionTitle.querySelectorAll(".inputInfos")[1].classList.add("invalid")
+           isValid=false;
         }
         else{
             questionTitle.querySelectorAll("h3")[1].textContent=""
@@ -698,6 +712,7 @@ function questionsValidationEvent(inputInfo){
         if(rightAnswer.querySelectorAll(".inputInfos")[0].value==""){
             rightAnswer.querySelectorAll("h3")[0].textContent="É necessario ao menos uma resposta correta!"
             rightAnswer.querySelectorAll(".inputInfos")[0].classList.add("invalid")
+            isValid=false;
         }
         else{
             rightAnswer.querySelectorAll("h3")[0].textContent=""
@@ -707,6 +722,7 @@ function questionsValidationEvent(inputInfo){
             if(rightAnswer.querySelectorAll(".inputInfos")[1].value.substring(0,8)!=="https://"){
                 rightAnswer.querySelectorAll("h3")[1].innerText="Preencha uma URL válida!"
                 rightAnswer.querySelectorAll(".inputInfos")[1].classList.add("invalid")
+                isValid=false;
             }
             else{
                 rightAnswer.querySelectorAll("h3")[1].innerText=""
@@ -721,6 +737,7 @@ function questionsValidationEvent(inputInfo){
             if(x===2&&currentQuestionChecked[0].value===""){
                 currentWarningsChecked[0].innerText="É necessário pelo menos uma resposta errada!"
                 currentQuestionChecked[0].classList.add("invalid")
+                isValid=false;
             }
             else{
                 currentWarningsChecked[0].innerText=""
@@ -731,6 +748,7 @@ function questionsValidationEvent(inputInfo){
                 if(currentQuestionChecked[1].value.substring(0,8)!=="https://"){
                     currentWarningsChecked[1].innerText="Preencha uma URL válida!"
                     currentQuestionChecked[1].classList.add("invalid")
+                    isValid=false;
                 }
                 else{
                     currentWarningsChecked[1].innerText=""
@@ -738,6 +756,13 @@ function questionsValidationEvent(inputInfo){
 
                 }
             }
+        }
+        const button =document.querySelector("button");
+        if(isValid){
+            button.setAttribute("class","proceedToLevels btn")
+        }
+        if(!isValid){
+            button.setAttribute("class","proceedToLevels btn disabled")
         }
     }
 }
@@ -759,6 +784,7 @@ function levelsGenerator(infos){
  }
  function levelsValidationEvent(){
     const allLevels = document.querySelectorAll(`.level`)
+    let isValid=true;
     const allLevelsPercentages = [];
     for(let i = 0; i < allLevels.length; i++){
         const AllLevelInputs = allLevels[i].querySelectorAll(`.inputInfos`)
@@ -774,6 +800,7 @@ function levelsGenerator(infos){
         if(levelTitle.length < 10){
             warningTitle.innerText="É necessário ao menos 10 caracteres!"
             AllLevelInputs[0].classList.add("invalid")
+            isValid=false;
         }
         else{
             warningTitle.innerText=""
@@ -782,6 +809,7 @@ function levelsGenerator(infos){
         if(Number(levelPercentage) < 0 || Number(levelPercentage) > 100){
             warningPercentage.innerText = "Insira um valor igual ou maior que zero e menor que 100!"
             AllLevelInputs[1].classList.add("invalid")
+            isValid=false;
         }
         else{
             warningPercentage.innerText = ""
@@ -791,6 +819,7 @@ function levelsGenerator(infos){
         if(levelURL.substring(0,8)!=="https://"){
             warningURL.innerText="Insira uma URL válida!"
             AllLevelInputs[2].classList.add("invalid")
+            isValid=false;
         } 
         else{
             warningURL.innerText=""
@@ -799,6 +828,7 @@ function levelsGenerator(infos){
         if(levelDescription.length < 30){
             warningDescription.innerText = "A descrição precisa ter ao menos 30 caracteres!"
             AllLevelInputs[3].classList.add("invalid")
+            isValid=false;
         }
         else{
             warningDescription.innerText = ""
@@ -810,7 +840,15 @@ function levelsGenerator(infos){
         for(let x =0; x<allLevels.length;x++){
             allLevels[x].querySelectorAll("h3")[1].innerText="Pelo menos um nível precisa ser a partir de 0% acertos!"
             allLevels[x].querySelectorAll(".inputInfos")[1].classList.add("invalid")
+            isValid=false;
         }
+    }
+    const button =document.querySelector("button");
+    if(isValid){
+        button.setAttribute("class","proceedToFinish btn")
+    }
+    if(!isValid){
+        button.setAttribute("class","proceedToFinish btn disabled")
     }
 }
  function levelSection(i){

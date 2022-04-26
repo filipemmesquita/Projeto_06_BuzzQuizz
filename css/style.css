@@ -464,6 +464,10 @@ button{ /*Resetar o css default do button*/
         line-height: 21px;
         color: #818181;
     }
+    .disabled{
+        pointer-events: none;
+        background: gray;
+    }
 h3{
     font-family: 'Roboto';
     font-style: normal;
