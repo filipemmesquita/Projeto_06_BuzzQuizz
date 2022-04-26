@@ -53,12 +53,10 @@ function renderQuizzes(allQuizzes){
             return false;
         })
     }
-    if(localStorage.length>0){
-        console.log(`Oi`)
+    if(localStorage.length>0 && localStorage.localQuizzKeyList.length>2){
         loadingUserQuizzes(userIds, userKeys)
         document.querySelector(`.userEmptyQuizzes`).remove()
     } else{
-        console.log(`Coé`)
         document.querySelector(`.userAllQuizzes`).remove()
     }
     //renderiza os quizzes de todo mundo
@@ -886,7 +884,6 @@ function editInfosQuizz(response){
     document.querySelector(`.proceedToQuestions`).setAttribute("onclick", "editProceedBtn(this)")
     callBackInfos(response)
     eventCheck()
-    removeLoading()
 }
 function editProceedBtn(element){
     const el = element.classList[0]
@@ -894,7 +891,6 @@ function editProceedBtn(element){
     if(el === "proceedToQuestions"){
         if(infosValidation()){
             cleanMainPage()
-            console.log(globalCreatedQuizz)
             loadingScreen()
             mainPage().innerHTML += quizzCreationHeader("Edite suas perguntas")
             mainPage().innerHTML += `
@@ -902,16 +898,15 @@ function editProceedBtn(element){
             </section>
             `
             questionsGenerator(values)
+            document.querySelector(`.proceedToLevels`).setAttribute("onclick","editProceedBtn(this)")
             getEditPromisse(id)
             promisse.then(callBackQuestions)
-            document.querySelector(`.proceedToLevels`).setAttribute("onclick","editProceedBtn(this)")
-            removeLoading()
         }
     }
     if(el === "proceedToLevels"){
+
         if(questionsValidation()){
             cleanMainPage()
-            console.log(globalCreatedQuizz)
             loadingScreen()
             mainPage().innerHTML += quizzCreationHeader("Agora, edite seus níveis")
             mainPage().innerHTML += `
@@ -919,18 +914,16 @@ function editProceedBtn(element){
             </section>
             `
             levelsGenerator(values)
+            document.querySelector(`.proceedToFinish`).setAttribute("onclick","editProceedBtn(this)")
             getEditPromisse(id)
             promisse.then(callBackLevels)
-            document.querySelector(`.proceedToFinish`).setAttribute("onclick","editProceedBtn(this)")
-            console.log(mainPage().classList[1])
-            removeLoading()
         }
     }
     if(el === "proceedToFinish"){
         console.log(`Oi`)
         if(levelValidation()){
-            console.log(`Oi`)
-            console.log(globalCreatedQuizz)
+            loadingScreen()
+            cleanMainPage()
             const config = {
                 headers:{
                   "Secret-Key": mainPage().classList[1]
@@ -938,8 +931,7 @@ function editProceedBtn(element){
             }
             const editpromisse = axios.put(`https://mock-api.driven.com.br/api/v6/buzzquizz/quizzes/${id}`,globalCreatedQuizz, config);
             editpromisse.then(function(){
-                cleanMainPage()
-                loadingScreen()
+                
                 mainPage().innerHTML += quizzCreationHeader("Seu quizz foi editado com sucesso!")
                 mainPage().innerHTML += `
                 <section class="quizzCreationFinish">
@@ -966,6 +958,7 @@ function callBackInfos(response){
     allInputs[1].value = infos.image
     allInputs[2].value = infos.questions.length
     allInputs[3].value = infos.levels.length
+    removeLoading()
 }
 function callBackQuestions(response){
     const questions = response.data.questions
@@ -987,6 +980,7 @@ function callBackQuestions(response){
             jumperImg++;
         }
     }
+    removeLoading()
 }
 function callBackLevels(response){
     const levels = response.data.levels;
@@ -998,6 +992,7 @@ function callBackLevels(response){
         allInputs[2].value = levels[i].image
         allInputs[3].value = levels[i].text
     }
+    removeLoading()
 }
 function deleteQuizz(quizzId,quizzKey){
     if (confirm("Tem certeza que deseja deletar este quizz?") == true){
