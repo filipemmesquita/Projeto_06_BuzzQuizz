@@ -316,11 +316,10 @@ main h1{
         border-radius: 5px;
         margin-bottom: 14px;
     }
-        .inputinfos::placeholder{
+        .inputInfos::placeholder{
             font-style: italic;
             font-weight: 400;
-            font-size: 19px;
-            line-height: 22px;
+            font-size: 15px;
             color: #BABABA;
         }
         .quizzCreationInputBox{
@@ -335,6 +334,10 @@ main h1{
             }
             .description::placeholder{
                 position: absolute;
+                font-style: italic;
+                font-weight: 400;
+                font-size: 15px;
+                color: #BABABA;
             }
             .description::target-text{
                 position: absolute;
@@ -417,7 +420,12 @@ main h1{
     }
         .sideButtons div{
             height: 42px;
+            display: flex;
             align-items: center;
+            padding:auto;
+            justify-content: center;
+        }
+        .sideButtons ion-icon{
             color:white;
             font-size: 25px;
         }
@@ -464,7 +472,7 @@ h3{
     align-self: left;
     margin-bottom: 5px;
 }
-body input.invalid{
+body .invalid{
     background: #FFE9E9;
     margin-bottom: 4px;
 }
