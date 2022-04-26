@@ -255,6 +255,7 @@ main h1{
             }
 /*Layout dos Quizz*/
 .quizz{ /*li -> quizz*/
+    width:340px;
     margin-top: 14px; /*Para mobile*/
     width: 340px;
     position: relative;
@@ -308,9 +309,8 @@ main h1{
         border: 1px solid #D1D1D1;
         box-sizing: border-box;
         border-radius: 5px;
-    }   .inputWrongValue{
-            background: #FFE9E9;
-        }
+        margin-bottom: 14px;
+    }
         .inputinfos::placeholder{
             font-style: italic;
             font-weight: 400;
@@ -322,10 +322,8 @@ main h1{
             margin-top: 15px;
             margin-bottom: 15px;
             width: 100%;
-            height: 106px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }   /*Input Especifico do Level*/
             .description{
                 height: 177px;
@@ -451,3 +449,17 @@ button{ /*Resetar o css default do button*/
         line-height: 21px;
         color: #818181;
     }
+h3{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    color: #EC362D;
+    align-self: left;
+    margin-bottom: 5px;
+}
+body input.invalid{
+    background: #FFE9E9;
+    margin-bottom: 4px;
+}
